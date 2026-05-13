@@ -3,129 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أولاد زكريا للكشري</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <title>Luxury Dining | Experience</title>
+    <!-- Google Fonts: Serif للفخامة و Sans للبساطة -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #c5a059; --dark: #121212; --card: #1e1e1e; --white: #fff; }
-        body { font-family: 'Cairo', sans-serif; background-color: var(--dark); color: var(--white); margin: 0; padding: 0; }
-        
-        header { text-align: center; padding: 40px 20px; }
-        .logo { width: 200px; height: 200px; border-radius: 20px; border: 3px solid var(--gold); object-fit: cover; }
-        h1 { color: var(--gold); margin-top: 15px; font-size: 2rem; }
+        :root {
+            --primary-gold: #c5a059;
+            --dark-bg: #0a0a0a;
+            --glass-white: rgba(255, 255, 255, 0.05);
+            --text-gray: #b5b5b5;
+        }
 
-        .container { max-width: 900px; margin: auto; padding: 20px; padding-bottom: 80px; }
-        .category-title { color: var(--gold); border-right: 4px solid var(--gold); padding-right: 15px; margin: 30px 0; }
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
-        .item { background: var(--card); padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; }
-        .add-btn { background: var(--gold); border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        #cart-icon { position: fixed; bottom: 20px; right: 20px; background: var(--gold); color: black; padding: 15px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            overflow-x: hidden;
+        }
 
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; z-index: 2000; }
-        .modal-content { background: var(--card); padding: 30px; border-radius: 15px; width: 90%; max-width: 400px; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; box-sizing: border-box; }
-        button.checkout-btn { width: 100%; background: var(--gold); padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        /* Luxury Background Header */
+        header {
+            height: 100vh;
+            width: 100%;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80'); /* صورة تعبيرية عالية الجودة */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Glassmorphism Navbar */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--glass-white);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--primary-gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 0 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary-gold);
+            opacity: 1;
+        }
+
+        /* Hero Text */
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to bottom, #ffffff, #a1a1a1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInDown 1.5s ease;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            max-width: 600px;
+            margin: 0 auto 30px;
+            line-height: 1.8;
+            animation: fadeInUp 1.5s ease;
+        }
+
+        /* Premium Button */
+        .cta-button {
+            padding: 15px 40px;
+            border: 1px solid var(--primary-gold);
+            color: var(--primary-gold);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            transition: 0.5s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button:hover {
+            background: var(--primary-gold);
+            color: black;
+            box-shadow: 0 0 20px rgba(197, 160, 89, 0.4);
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero-content h1 { font-size: 3rem; }
+            nav { padding: 20px; }
+            nav ul { display: none; } /* يفضل استبدالها بـ Burger Menu لاحقاً */
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <img src="logo.jpg" alt="Logo" class="logo">
-        <h1>أولاد زكريا للكشري</h1>
+    <nav>
+        <div class="logo">LUXURY LOGO</div>
+        <ul>
+            <li><a href="#home">الرئيسية</a></li>
+            <li><a href="#menu">المنيو</a></li>
+            <li><a href="#about">قصتنا</a></li>
+            <li><a href="#contact">اتصل بنا</a></li>
+        </ul>
+    </nav>
+
+    <header id="home">
+        <div class="hero-content">
+            <h1>فن المذاق الرفيع</h1>
+            <p>تجربة طعام استثنائية تجمع بين الأصالة والحداثة في قلب فرعنا الوحيد والمميز.</p>
+            <a href="#menu" class="cta-button">اكتشف القائمة</a>
+        </div>
     </header>
 
-    <div class="container" id="menu">جاري تحميل القائمة...</div>
-
-    <div id="cart-icon" onclick="showModal()">🛒 السلة: <span id="cart-total">0 ج</span></div>
-
-    <div class="modal" id="orderModal">
-        <div class="modal-content">
-            <h3>بيانات التوصيل</h3>
-            <input type="text" id="name" placeholder="الاسم">
-            <input type="text" id="phone" placeholder="رقم التليفون">
-            <input type="text" id="address" placeholder="العنوان بالتفصيل">
-            <button class="checkout-btn" onclick="sendWhatsApp()">إرسال الطلب عبر واتساب</button>
-            <button onclick="history.back()" style="background:none; border:none; color:red; margin-top:10px; width:100%; cursor:pointer;">إغلاق</button>
-        </div>
-    </div>
-
-    <script>
-        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSn6BL0A5IgV6qIS2p6lAvYx8VNcTD_0f2WMiBgQJV9uDtEbHUH8Ok_eiJt0xdNiMIKh8FPhCWTF9LP/pub?output=csv';
-        let cart = [];
-        let totalSum = 0;
-
-        async function initMenu() {
-            try {
-                const response = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent(csvUrl));
-                const json = await response.json();
-                const rows = json.contents.split('\n').slice(1);
-                
-                let menuData = [];
-                rows.forEach(row => {
-                    const cols = row.split(',');
-                    if (cols.length < 3) return;
-                    
-                    const category = cols[0].trim();
-                    const name = cols[1].trim();
-                    const price = parseInt(cols[2].trim());
-                    
-                    if (!category || !name || isNaN(price)) return;
-
-                    let catObj = menuData.find(c => c.category === category);
-                    if (!catObj) {
-                        catObj = { category: category, items: [] };
-                        menuData.push(catObj);
-                    }
-                    catObj.items.push({ name: name, price: price });
-                });
-                renderMenu(menuData);
-            } catch (e) {
-                console.error(e);
-                document.getElementById('menu').innerText = "حدث خطأ في تحميل القائمة. تأكد من اتصال الإنترنت.";
-            }
-        }
-
-        function renderMenu(menuItems) {
-            const container = document.getElementById('menu');
-            container.innerHTML = ""; 
-            menuItems.forEach(cat => {
-                container.innerHTML += `<h2 class="category-title">${cat.category}</h2><div class="menu-grid" id="${cat.category}"></div>`;
-                const grid = document.getElementById(cat.category);
-                cat.items.forEach(item => {
-                    grid.innerHTML += `<div class="item"><span>${item.name} (${item.price} ج)</span><button class="add-btn" onclick="addToCart('${item.name}', ${item.price})">+</button></div>`;
-                });
-            });
-        }
-
-        function addToCart(name, price) {
-            cart.push({name, price});
-            totalSum += price;
-            document.getElementById('cart-total').innerText = totalSum + " ج";
-        }
-
-        function showModal() {
-            if(cart.length === 0) return alert("السلة فارغة!");
-            document.getElementById('orderModal').style.display = 'flex';
-            history.pushState({modalOpen: true}, '', '');
-        }
-
-        window.onpopstate = function(event) {
-            document.getElementById('orderModal').style.display = 'none';
-        };
-
-        function sendWhatsApp() {
-            let name = document.getElementById('name').value;
-            let phone = document.getElementById('phone').value;
-            let address = document.getElementById('address').value;
-            
-            if(!name || !phone || !address) return alert("يرجى ملء جميع البيانات");
-
-            let orderList = cart.map(i => i.name + " - " + i.price + " ج").join("%0A");
-            let message = `*طلب جديد من مطعم أولاد زكريا*%0A%0A*الطلبات:*%0A${orderList}%0A%0A*الإجمالي:* ${totalSum} ج%0A%0A*بيانات العميل:*%0Aالاسم: ${name}%0Aالتليفون: ${phone}%0Aالعنوان: ${address}`;
-            window.open(`https://wa.me/201003800314?text=${message}`, '_blank');
-        }
-
-        initMenu();
-    </script>
 </body>
 </html>
