@@ -3,360 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>منيو أبو خضر | الفخامة في كل طبق</title>
-    
-    <!-- الخطوط والأيقونات -->
+    <title>منيو أبو خضر الذكي</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --emerald: #062c21;
-            --gold: #c5a059;
-            --dark-bg: #050505;
-            --card-bg: #121212;
-            --text-gray: #a0a0a0;
-            --soft-glass: rgba(255, 255, 255, 0.03);
-            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --emerald: #062c21; --gold: #c5a059; --dark-bg: #050505;
+            --card-bg: #121212; --text-gray: #a0a0a0; --transition: all 0.4s ease;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body {
-            background-color: var(--dark-bg);
-            color: #fff;
-            font-family: 'Cairo', sans-serif;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+        body { background-color: var(--dark-bg); color: #fff; font-family: 'Cairo', sans-serif; overflow-x: hidden; }
 
-        /* --- Header & Curve Section --- */
+        /* Arc & Logo */
         .header-container {
-            position: relative;
-            height: 260px;
-            width: 100%;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
-                        url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1000&q=80');
-            background-size: cover;
-            background-position: center;
-            /* رسم القوس الانسيابي */
-            clip-path: ellipse(150% 100% at 50% 0%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            height: 240px; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1000&q=80');
+            background-size: cover; clip-path: ellipse(150% 100% at 50% 0%); position: relative;
         }
+        .logo-wrapper { position: absolute; bottom: -45px; left: 50%; transform: translateX(-50%); z-index: 20; }
+        .logo-circle { width: 95px; height: 95px; background: var(--card-bg); border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px #000; }
+        .logo-circle span { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold); }
 
-        .logo-wrapper {
-            position: absolute;
-            bottom: -45px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 20;
-        }
-
-        .logo-circle {
-            width: 100px;
-            height: 100px;
-            background: var(--card-bg);
-            border: 3px solid var(--gold);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-        }
-
-        .logo-circle span {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            color: var(--gold);
-        }
-
-        /* --- Category Navigation (Circular) --- */
-        .category-nav {
-            margin-top: 70px;
-            display: flex;
-            overflow-x: auto;
-            padding: 10px 20px;
-            gap: 20px;
-            scrollbar-width: none;
-            position: sticky;
-            top: 0;
-            background: var(--dark-bg);
-            z-index: 100;
-            border-bottom: 1px solid var(--soft-glass);
-        }
-
+        /* Navigation */
+        .category-nav { margin-top: 65px; display: flex; overflow-x: auto; padding: 15px; gap: 15px; position: sticky; top: 0; background: var(--dark-bg); z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.05); scrollbar-width: none; }
         .category-nav::-webkit-scrollbar { display: none; }
+        .cat-item { display: flex; flex-direction: column; align-items: center; min-width: 70px; cursor: pointer; opacity: 0.6; transition: 0.3s; }
+        .cat-item.active { opacity: 1; transform: scale(1.1); }
+        .cat-icon { width: 55px; height: 55px; background: rgba(255,255,255,0.03); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 5px; border: 1px solid rgba(197, 160, 89, 0.1); color: var(--gold); font-size: 1.1rem; }
+        .cat-item.active .cat-icon { background: var(--emerald); border-color: var(--gold); }
+        .cat-item span { font-size: 0.7rem; font-weight: 600; }
 
-        .cat-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 75px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .cat-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--soft-glass);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 8px;
-            border: 1px solid rgba(197, 160, 89, 0.1);
-            color: var(--text-gray);
-            font-size: 1.2rem;
-            transition: var(--transition);
-        }
-
-        .cat-item.active .cat-icon {
-            background: var(--emerald);
-            color: var(--gold);
-            border-color: var(--gold);
-            transform: scale(1.1);
-            box-shadow: 0 0 15px rgba(197, 160, 89, 0.2);
-        }
-
-        .cat-item span {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-gray);
-        }
-
-        .cat-item.active span { color: var(--gold); }
-
-        /* --- Menu Items Section --- */
-        .menu-section { padding: 20px; }
-
-        .section-title {
-            color: var(--gold);
-            font-size: 1.2rem;
-            margin: 20px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section-title::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(to left, var(--gold), transparent);
-            opacity: 0.3;
-        }
-
-        .food-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            gap: 15px;
-            border: 1px solid rgba(255,255,255,0.03);
-            transition: var(--transition);
-        }
-
-        .food-card:active { transform: scale(0.96); }
-
+        /* Menu */
+        .menu-section { padding: 15px; min-height: 500px; }
+        .section-title { color: var(--gold); margin: 25px 0 15px; display: flex; align-items: center; gap: 10px; font-size: 1.1rem; }
+        .section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to left, var(--gold), transparent); opacity: 0.2; }
+        
+        .food-card { background: var(--card-bg); border-radius: 18px; padding: 12px; margin-bottom: 12px; display: flex; gap: 12px; border: 1px solid rgba(255,255,255,0.02); animation: fadeInUp 0.5s ease forwards; }
         .food-info { flex: 1; }
+        .food-name { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 3px; }
+        .food-desc { font-size: 0.8rem; color: var(--text-gray); line-height: 1.3; margin-bottom: 10px; height: 32px; overflow: hidden; }
+        .food-footer { display: flex; justify-content: space-between; align-items: center; }
+        .food-price { color: var(--gold); font-weight: 700; }
+        .add-btn { background: var(--emerald); color: var(--gold); border: 1px solid var(--gold); width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .food-img { width: 95px; height: 95px; border-radius: 12px; object-fit: cover; background: #222; }
 
-        .food-name {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-            color: #efefef;
-        }
+        /* Loading */
+        #loader { text-align: center; padding: 50px; color: var(--gold); }
 
-        .food-desc {
-            font-size: 0.85rem;
-            color: var(--text-gray);
-            line-height: 1.4;
-            margin-bottom: 12px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .food-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .food-price {
-            color: var(--gold);
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .add-btn {
-            background: var(--emerald);
-            color: var(--gold);
-            border: 1px solid var(--gold);
-            width: 38px;
-            height: 38px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            cursor: pointer;
-        }
-
-        .food-img {
-            width: 110px;
-            height: 110px;
-            border-radius: 15px;
-            object-fit: cover;
-            border: 1px solid rgba(197, 160, 89, 0.1);
-        }
-
-        /* --- Floating Cart --- */
-        .cart-bar {
-            position: fixed;
-            bottom: 25px;
-            left: 5%;
-            width: 90%;
-            background: var(--gold);
-            padding: 18px 25px;
-            border-radius: 100px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: var(--emerald);
-            font-weight: 700;
-            z-index: 1000;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-            transform: translateY(150%);
-            transition: var(--transition);
-        }
-
-        .cart-bar.active { transform: translateY(0); }
-
-        .cart-info { display: flex; align-items: center; gap: 10px; }
-        .cart-count {
-            background: var(--emerald);
-            color: var(--gold);
-            padding: 2px 10px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-        }
-
-        /* --- Animations --- */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .food-card { animation: fadeIn 0.6s ease forwards; }
-
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-    <!-- Cover Area with Arc -->
-    <header class="header-container">
-        <div class="logo-wrapper">
-            <div class="logo-circle">
-                <span>أ</span>
-            </div>
-        </div>
-    </header>
-
+    <header class="header-container"><div class="logo-wrapper"><div class="logo-circle"><span>أ</span></div></div></header>
+    
     <div style="text-align: center; margin-top: 50px;">
-        <h1 style="font-family: 'Playfair Display'; color: var(--gold); font-size: 1.8rem;">أبو خضر</h1>
-        <p style="color: var(--text-gray); font-size: 0.9rem;">تجربة الطعام الملكي</p>
+        <h1 style="font-family: 'Playfair Display'; color: var(--gold);">أبو خضر</h1>
+        <p style="color: var(--text-gray); font-size: 0.8rem;">فخامة المذاق الأصيل</p>
     </div>
 
-    <!-- Curved Navigation -->
-    <div class="category-nav">
-        <div class="cat-item active" onclick="selectCat(this)">
-            <div class="cat-icon"><i class="fas fa-star"></i></div>
-            <span>المميز</span>
-        </div>
-        <div class="cat-item" onclick="selectCat(this)">
-            <div class="cat-icon"><i class="fas fa-fire"></i></div>
-            <span>المشاوي</span>
-        </div>
-        <div class="cat-item" onclick="selectCat(this)">
-            <div class="cat-icon"><i class="fas fa-pizza-slice"></i></div>
-            <span>البيتزا</span>
-        </div>
-        <div class="cat-item" onclick="selectCat(this)">
-            <div class="cat-icon"><i class="fas fa-hamburger"></i></div>
-            <span>برجر</span>
-        </div>
-        <div class="cat-item" onclick="selectCat(this)">
-            <div class="cat-icon"><i class="fas fa-ice-cream"></i></div>
-            <span>حلويات</span>
-        </div>
+    <div class="category-nav" id="catNav">
+        <!-- ستظهر الأقسام هنا تلقائياً -->
     </div>
 
-    <!-- Menu Section -->
-    <div class="menu-section">
-        <h2 class="section-title">الأكثر مبيعاً</h2>
-
-        <div class="food-card">
-            <div class="food-info">
-                <h3 class="food-name">كباب أبو خضر المخصوص</h3>
-                <p class="food-desc">لحم بلدي فاخر متبل بخلطة أبو خضر السرية مشوي على الفحم الطبيعي.</p>
-                <div class="food-footer">
-                    <span class="food-price">350 EGP</span>
-                    <div class="add-btn" onclick="updateCart()"><i class="fas fa-plus"></i></div>
-                </div>
-            </div>
-            <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=300&q=80" class="food-img" alt="كباب">
-        </div>
-
-        <div class="food-card">
-            <div class="food-info">
-                <h3 class="food-name">بيتزا سوبريم إيطالية</h3>
-                <p class="food-desc">عجينة هشة مغطاة بأجود أنواع الجبن الإيطالي والخضروات الطازجة.</p>
-                <div class="food-footer">
-                    <span class="food-price">180 EGP</span>
-                    <div class="add-btn" onclick="updateCart()"><i class="fas fa-plus"></i></div>
-                </div>
-            </div>
-            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=300&q=80" class="food-img" alt="بيتزا">
-        </div>
-    </div>
-
-    <!-- Floating Cart Bar -->
-    <div class="cart-bar" id="cartBar">
-        <div class="cart-info">
-            <span class="cart-count" id="count">0</span>
-            <span>صنف في السلة</span>
-        </div>
-        <div class="cart-action">
-            عرض الطلب <i class="fas fa-arrow-left" style="margin-right: 10px;"></i>
-        </div>
+    <div class="menu-section" id="menuContent">
+        <div id="loader"><i class="fas fa-spinner fa-spin"></i> جاري تحميل المنيو الملكي...</div>
     </div>
 
     <script>
-        let itemsCount = 0;
+        const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRzOW2Z2TFsXm8b7uV8QcVqY1HKF0Qq-Dxyeq2c6avxRsm9PjqXGvM4yyIWRV30DqblUB3BEMeXpI-a/pub?output=csv";
+        
+        // رابط الصور الأساسي على جيت هاب (استبدله برابطك الحقيقي لاحقاً)
+        const imgBaseUrl = "https://raw.githubusercontent.com/YOUR_USER/YOUR_REPO/main/images/";
 
-        function selectCat(element) {
-            document.querySelectorAll('.cat-item').forEach(item => item.classList.remove('active'));
-            element.classList.add('active');
-            // هنا يمكن إضافة فلترة المنتجات بناءً على القسم
+        async function fetchMenu() {
+            try {
+                const response = await fetch(sheetUrl);
+                const data = await response.text();
+                const rows = data.split('\n').slice(1); // تجاهل صف العناوين
+                
+                const menuData = rows.map(row => {
+                    const cols = row.split(',');
+                    return {
+                        section: cols[0]?.trim(),
+                        name: cols[1]?.trim(),
+                        desc: cols[2]?.trim(),
+                        price: cols[3]?.trim(),
+                        photo: cols[4]?.trim()
+                    };
+                }).filter(item => item.name); // تجاهل الصفوف الفارغة
+
+                renderMenu(menuData);
+            } catch (error) {
+                document.getElementById('menuContent').innerHTML = "خطأ في تحميل البيانات.";
+            }
         }
 
-        function updateCart() {
-            itemsCount++;
-            const cartBar = document.getElementById('cartBar');
-            const countDisplay = document.getElementById('count');
-            
-            countDisplay.innerText = itemsCount;
-            cartBar.classList.add('active');
+        function renderMenu(data) {
+            const menuContent = document.getElementById('menuContent');
+            const catNav = document.getElementById('catNav');
+            menuContent.innerHTML = "";
+            catNav.innerHTML = "";
 
-            // إضافة تأثير اهتزاز بسيط عند الإضافة
-            navigator.vibrate(50); 
+            // استخراج الأقسام الفريدة
+            const sections = [...new Set(data.map(item => item.section))];
+
+            sections.forEach((sec, index) => {
+                // إضافة زر القسم في الناف بار
+                const activeClass = index === 0 ? 'active' : '';
+                catNav.innerHTML += `
+                    <div class="cat-item ${activeClass}" onclick="scrollToSection('${sec}', this)">
+                        <div class="cat-icon"><i class="fas fa-utensils"></i></div>
+                        <span>${sec}</span>
+                    </div>
+                `;
+
+                // إضافة القسم وعناصره
+                let sectionHtml = `<h2 class="section-title" id="sec-${sec}">${sec}</h2>`;
+                const items = data.filter(i => i.section === sec);
+                
+                items.forEach(item => {
+                    sectionHtml += `
+                        <div class="food-card">
+                            <div class="food-info">
+                                <h3 class="food-name">${item.name}</h3>
+                                <p class="food-desc">${item.desc}</p>
+                                <div class="food-footer">
+                                    <span class="food-price">${item.price} EGP</span>
+                                    <div class="add-btn"><i class="fas fa-plus"></i></div>
+                                </div>
+                            </div>
+                            <img src="${imgBaseUrl}${item.photo}" class="food-img" onerror="this.src='https://via.placeholder.com/150?text=No+Image'">
+                        </div>
+                    `;
+                });
+                menuContent.innerHTML += sectionHtml;
+            });
         }
+
+        function scrollToSection(id, el) {
+            document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('sec-' + id).scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        fetchMenu();
     </script>
 </body>
 </html>
