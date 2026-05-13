@@ -8,45 +8,45 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        :root { --gold: #c5a059; --dark-bg: #050505; --card-bg: #111; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--dark-bg); color: #fff; font-family: 'Cairo', sans-serif; }
+        :root { --gold: #c5a059; --dark-bg: #050505; --card-bg: #111; --text-muted: #777; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--dark-bg); color: #fff; font-family: 'Cairo', sans-serif; line-height: 1.6; }
 
-        /* Header Arc */
+        /* Header Area */
         .header { height: 200px; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=500'); background-size: cover; clip-path: ellipse(150% 100% at 50% 0%); position: relative; }
-        .logo { position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%); width: 80px; height: 80px; background: var(--card-bg); border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--gold); box-shadow: 0 5px 15px #000; }
+        .logo { position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%); width: 85px; height: 85px; background: var(--card-bg); border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; color: var(--gold); box-shadow: 0 8px 20px #000; z-index: 10; }
 
-        /* Navigation */
-        .category-nav { margin-top: 60px; display: flex; overflow-x: auto; padding: 10px; gap: 15px; position: sticky; top: 0; background: var(--dark-bg); z-index: 100; scrollbar-width: none; border-bottom: 1px solid #222; }
+        /* Fixed Navigation */
+        .category-nav { margin-top: 60px; display: flex; overflow-x: auto; padding: 12px; gap: 15px; position: sticky; top: 0; background: var(--dark-bg); z-index: 100; border-bottom: 1px solid #222; scrollbar-width: none; }
         .category-nav::-webkit-scrollbar { display: none; }
-        .cat-item { min-width: 80px; text-align: center; opacity: 0.5; transition: 0.3s; cursor: pointer; }
+        .cat-item { min-width: 85px; text-align: center; opacity: 0.5; transition: 0.4s; cursor: pointer; }
         .cat-item.active { opacity: 1; color: var(--gold); transform: scale(1.05); }
-        .cat-icon { width: 45px; height: 45px; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px; border: 1px solid rgba(197,160,89,0.2); color: var(--gold); }
+        .cat-icon { width: 50px; height: 50px; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; border: 1px solid rgba(197,160,89,0.2); color: var(--gold); font-size: 1.2rem; }
 
-        /* Content Sections */
-        .menu-section { padding: 15px; }
-        .section-title { color: var(--gold); margin: 25px 0 15px; font-size: 1.1rem; border-right: 3px solid var(--gold); padding-right: 10px; }
+        /* Menu Content */
+        .menu-section { padding: 15px; padding-bottom: 50px; }
+        .section-title { color: var(--gold); margin: 30px 0 15px; font-size: 1.2rem; border-right: 4px solid var(--gold); padding-right: 12px; font-weight: 700; }
         
-        .food-card { background: var(--card-bg); border-radius: 12px; padding: 10px; margin-bottom: 12px; display: flex; gap: 12px; align-items: center; border: 1px solid #1a1a1a; }
+        .food-card { background: var(--card-bg); border-radius: 15px; padding: 12px; margin-bottom: 15px; display: flex; gap: 12px; align-items: center; border: 1px solid #1a1a1a; transition: 0.3s; }
         .food-info { flex: 1; }
-        .food-name { font-size: 0.95rem; font-weight: 700; margin-bottom: 2px; color: #efefef; }
+        .food-name { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; color: #fff; }
         
-        /* التعديل المطلوب: وصف صغير ولون خافت ومنظم */
-        .food-desc { font-size: 0.7rem; color: #777; line-height: 1.3; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        /* التعديل المطلوب: وصف صغير جداً ومنسق */
+        .food-desc { font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; }
         
         .food-footer { display: flex; justify-content: space-between; align-items: center; }
-        .food-price { color: var(--gold); font-weight: 700; font-size: 0.9rem; }
-        .add-btn { background: #062c21; color: var(--gold); border: 1px solid var(--gold); width: 30px; height: 30px; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+        .food-price { color: var(--gold); font-weight: 700; font-size: 0.95rem; }
+        .add-btn { background: #062c21; color: var(--gold); border: 1px solid var(--gold); width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
         
-        .food-img { width: 85px; height: 85px; border-radius: 10px; object-fit: cover; background: #222; border: 1px solid #222; }
+        .food-img { width: 90px; height: 90px; border-radius: 12px; object-fit: cover; background: #222; border: 1px solid #222; }
     </style>
 </head>
 <body>
 
     <div class="header"><div class="logo">أ</div></div>
-    <div style="text-align: center; margin-top: 45px;">
-        <h2 style="color: var(--gold); font-size: 1.4rem;">أبو خضر</h2>
-        <p style="color: #555; font-size: 0.7rem;">THE ROYAL EXPERIENCE</p>
+    <div style="text-align: center; margin-top: 50px;">
+        <h2 style="color: var(--gold); font-size: 1.5rem;">أبو خضر</h2>
+        <p style="color: #444; font-size: 0.75rem; letter-spacing: 1px;">THE ROYAL EXPERIENCE</p>
     </div>
 
     <div class="category-nav" id="catNav"></div>
@@ -54,18 +54,16 @@
 
     <script>
         const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRzOW2Z2TFsXm8b7uV8QcVqY1HKF0Qq-Dxyeq2c6avxRsm9PjqXGvM4yyIWRV30DqblUB3BEMeXpI-a/pub?output=csv";
-        
-        // استبدل الرابط أدناه برابط مجلد الصور في جيت هاب الخاص بك
         const imgBaseUrl = "https://raw.githubusercontent.com/YOUR_USER/YOUR_REPO/main/images/";
 
         async function fetchMenu() {
             try {
                 const res = await fetch(sheetUrl);
                 const csvText = await res.text();
-                
-                // معالجة CSV دقيقة جداً لمنع تكرار الأقسام أو حدوث undefined
                 const lines = csvText.split(/\r?\n/).slice(1);
+                
                 const data = lines.map(line => {
+                    // معالجة ذكية للفواصل لضمان عدم تداخل البيانات
                     const parts = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                     return {
                         section: parts[0]?.replace(/"/g, '').trim(),
@@ -77,26 +75,26 @@
                 }).filter(i => i.name && i.section);
 
                 render(data);
-            } catch (e) {
-                console.error("Error loading data");
-            }
+            } catch (e) { console.error("Error loading CSV"); }
         }
 
         function render(data) {
             const container = document.getElementById('menuContent');
             const nav = document.getElementById('catNav');
+            
+            // استخراج الأقسام الفريدة بدون "الكل"
             const sections = [...new Set(data.map(i => i.section))];
 
             sections.forEach((sec, idx) => {
-                // إضافة الأقسام في الشريط العلوي
+                // أيقونات التنقل العلوية
                 nav.innerHTML += `
-                <div class="cat-item ${idx===0?'active':''}" onclick="go(this, 's-${sec}')">
+                <div class="cat-item ${idx===0?'active':''}" onclick="scrollToSec(this, 'sec-${sec}')">
                     <div class="cat-icon"><i class="fas fa-utensils"></i></div>
                     <span>${sec}</span>
                 </div>`;
                 
-                // بناء كروت الطعام لكل قسم
-                let html = `<h2 class="section-title" id="s-${sec}">${sec}</h2>`;
+                // محتوى الأقسام
+                let html = `<h2 class="section-title" id="sec-${sec}">${sec}</h2>`;
                 data.filter(i => i.section === sec).forEach(item => {
                     html += `
                     <div class="food-card">
@@ -108,17 +106,19 @@
                                 <div class="add-btn"><i class="fas fa-plus"></i></div>
                             </div>
                         </div>
-                        <img src="${imgBaseUrl}${item.photo}" class="food-img" onerror="this.src='https://via.placeholder.com/85/111/c5a059?text=Food'">
+                        <img src="${imgBaseUrl}${item.photo}" class="food-img" onerror="this.src='https://via.placeholder.com/90/111/c5a059?text=Food'">
                     </div>`;
                 });
                 container.innerHTML += html;
             });
         }
 
-        function go(el, id) {
+        function scrollToSec(el, id) {
             document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
-            document.getElementById(id).scrollIntoView({behavior:'smooth', block:'center'});
+            const target = document.getElementById(id);
+            const offset = 100;
+            window.scrollTo({ top: target.offsetTop - offset, behavior: 'smooth' });
         }
 
         fetchMenu();
