@@ -3,315 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مطعم الفخامة | تجربة استثنائية</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;600;800&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+    <title>Concept Store | تجربة بصرية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;700;900&display=swap" rel="stylesheet">
     
     <style>
-        /* --- CSS STYLES --- */
         :root {
-            --primary: #c5a059; /* ذهبي مطفي */
-            --bg: #0d0d0d;
-            --card-bg: #1a1a1a;
-            --text: #ffffff;
-            --glass: rgba(255, 255, 255, 0.03);
+            --accent: #ff4d4d;
+            --bg: #f4f4f4;
+            --text: #1a1a1a;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        
+        body { background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+        /* Navigation Vertical */
+        .side-nav {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            overflow-x: hidden;
+        .side-nav span {
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--text);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s;
         }
 
-        /* Hero Section */
-        .hero {
+        .side-nav span.active { background: var(--accent); border-color: var(--accent); height: 30px; border-radius: 10px; }
+
+        /* Full Screen Sections */
+        section {
             height: 100vh;
+            width: 100%;
             display: flex;
             align-items: center;
-            justify-content: center;
-            text-align: center;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(13,13,13,1)),
-                        url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=1500');
+            padding: 0 10%;
+            position: relative;
+        }
+
+        .section-content { width: 50%; z-index: 2; }
+
+        .section-content h2 { font-size: 5rem; line-height: 1; margin-bottom: 20px; font-weight: 900; }
+
+        .section-content p { font-size: 1.2rem; color: #555; margin-bottom: 30px; max-width: 400px; }
+
+        .section-image {
+            position: absolute;
+            right: 10%;
+            width: 45%;
+            height: 70vh;
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
+            border-radius: 5px;
+            box-shadow: 50px 50px 0px rgba(0,0,0,0.05);
+            transition: 0.8s cubic-bezier(0.17, 0.67, 0.83, 0.67);
         }
 
-        .hero-content h1 {
-            font-size: clamp(3rem, 8vw, 5rem);
-            font-weight: 800;
-            margin-bottom: 10px;
-            letter-spacing: -2px;
-        }
-
-        .hero-content p {
-            font-size: 1.2rem;
-            color: #aaa;
-            margin-bottom: 30px;
-        }
-
-        .btn {
-            padding: 12px 35px;
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            text-decoration: none;
-            border-radius: 2px;
-            transition: all 0.4s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.9rem;
-        }
-
-        .btn:hover {
-            background: var(--primary);
-            color: #000;
-            box-shadow: 0 0 30px rgba(197, 160, 89, 0.4);
-        }
-
-        /* Menu Tabs */
-        .menu-container {
-            padding: 100px 5%;
-            max-width: 1200px;
-            margin: auto;
-        }
-
-        .tabs {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 60px;
-            flex-wrap: wrap;
-        }
-
-        .tab-btn {
-            background: none;
-            border: none;
-            color: #666;
-            font-size: 1.1rem;
-            cursor: pointer;
-            padding: 10px 20px;
-            transition: 0.3s;
-            position: relative;
-        }
-
-        .tab-btn.active {
-            color: var(--primary);
-        }
-
-        .tab-btn.active::after {
-            content: '';
+        /* Floating Price */
+        .price-tag {
             position: absolute;
-            bottom: 0;
-            left: 20%;
-            width: 60%;
-            height: 2px;
-            background: var(--primary);
+            bottom: -20px;
+            left: -20px;
+            background: var(--accent);
+            color: white;
+            padding: 20px;
+            font-weight: bold;
+            font-size: 1.5rem;
         }
 
-        /* Grid Layout */
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 40px;
-        }
+        /* Sections Backgrounds & Colors */
+        #sec1 .section-image { background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800'); }
+        #sec2 .section-image { background-image: url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800'); right: auto; left: 10%; }
+        #sec2 .section-content { margin-right: auto; text-align: left; }
+        #sec3 .section-image { background-image: url('https://images.unsplash.com/photo-1567620905732-2d1ec7bb7445?auto=format&fit=crop&w=800'); }
 
-        .menu-item {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-            display: none; /* يتم التحكم به عبر JS */
-        }
-
-        .menu-item.show {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            overflow: hidden;
-            position: relative;
-            transition: 0.4s;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .card:hover {
-            transform: scale(1.03);
-            border-color: var(--primary);
-        }
-
-        .card img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            filter: grayscale(30%);
-            transition: 0.5s;
-        }
-
-        .card:hover img {
-            filter: grayscale(0%);
-        }
-
-        .card-body {
-            padding: 25px;
-        }
-
-        .card-body h3 {
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-            color: var(--primary);
-        }
-
-        .card-body p {
-            color: #888;
-            font-size: 0.95rem;
-            height: 50px;
-        }
-
-        .price {
-            display: block;
-            margin-top: 20px;
-            font-weight: 600;
-            font-size: 1.2rem;
-        }
-
-        /* Footer */
-        footer {
-            padding: 50px;
-            text-align: center;
-            border-top: 1px solid var(--glass);
-            margin-top: 100px;
-            color: #555;
+        /* Custom UI Buttons */
+        .order-btn {
+            padding: 15px 40px;
+            background: var(--text);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            letter-spacing: 2px;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .hero-content h1 { font-size: 2.5rem; }
+            .section-content h2 { font-size: 2.5rem; }
+            .section-content { width: 100%; text-align: center; }
+            .section-image { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1 style="font-family: 'Playfair Display', serif; font-style: italic;">The Noir Kitchen</h1>
-            <p>حيث تلتقي المكونات الطازجة مع الفن البصري</p>
-            <a href="#menu" class="btn">استكشف القائمة</a>
+    <div class="side-nav">
+        <span class="active" onclick="scrollToSec('sec1')"></span>
+        <span onclick="scrollToSec('sec2')"></span>
+        <span onclick="scrollToSec('sec3')"></span>
+    </div>
+
+    <section id="sec1">
+        <div class="section-content">
+            <h2>المشويات<br>الأصلية</h2>
+            <p>نختار أجود أنواع اللحوم لنقدمها لك بلمسة عصرية ونكهة تقليدية لا تُنسى.</p>
+            <button class="order-btn">عرض القائمة</button>
+        </div>
+        <div class="section-image">
+            <div class="price-tag">يبدأ من 350 LE</div>
         </div>
     </section>
 
-    <section id="menu" class="menu-container">
-        <div class="tabs">
-            <button class="tab-btn active" onclick="filter('all')">الكل</button>
-            <button class="tab-btn" onclick="filter('main')">أطباق رئيسية</button>
-            <button class="tab-btn" onclick="filter('steaks')">ستيك</button>
-            <button class="tab-btn" onclick="filter('drinks')">مشروبات</button>
+    <section id="sec2">
+        <div class="section-content">
+            <h2>إيطاليا<br>في طبق</h2>
+            <p>البيتزا المخبوزة في فرن الحطب مع أجبان مستوردة خصيصاً لتناسب ذوقك الرفيع.</p>
+            <button class="order-btn">اطلب الآن</button>
         </div>
-
-        <div class="menu-grid" id="grid">
-            <div class="menu-item main show">
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500" alt="food">
-                    <div class="card-body">
-                        <h3>سلطة السلمون الآسيوية</h3>
-                        <p>سلمون طازج مع نكهات الصويا والسمسم والخضروات.</p>
-                        <span class="price">280 EGP</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="menu-item steaks show">
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=500" alt="steak">
-                    <div class="card-body">
-                        <h3>ريب آي ستيك</h3>
-                        <p>قطعة لحم فاخرة مشوية على اللهب مع زبدة الأعشاب.</p>
-                        <span class="price">550 EGP</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="menu-item drinks show">
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1544145945-f904253d0c7b?auto=format&fit=crop&w=500" alt="drink">
-                    <div class="card-body">
-                        <h3>قهوة لاتيه باردة</h3>
-                        <p>مزيج من القهوة المختصة مع الحليب المخفوق والكراميل.</p>
-                        <span class="price">95 EGP</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="menu-item main show">
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=500" alt="pasta">
-                    <div class="card-body">
-                        <h3>باستا الريحان</h3>
-                        <p>باستا منزلية الصنع مع صوص البيستو الإيطالي الأصلي.</p>
-                        <span class="price">210 EGP</span>
-                    </div>
-                </div>
-            </div>
+        <div class="section-image">
+            <div class="price-tag">يبدأ من 180 LE</div>
         </div>
     </section>
 
-    <footer>
-        <p>&copy; 2024 جميع الحقوق محفوظة لـ مطعم الفخامة</p>
-    </footer>
+    <section id="sec3">
+        <div class="section-content">
+            <h2>حلويات<br>خرافية</h2>
+            <p>ختامها مسك مع تشكيلة من الحلويات العالمية المحضرة يومياً بكل حب.</p>
+            <button class="order-btn">تحلية اليوم</button>
+        </div>
+        <div class="section-image">
+            <div class="price-tag">يبدأ من 120 LE</div>
+        </div>
+    </section>
 
     <script>
-        function filter(category) {
-            const items = document.querySelectorAll('.menu-item');
-            const btns = document.querySelectorAll('.tab-btn');
-
-            // تحديث الأزرار
-            btns.forEach(btn => {
-                btn.classList.remove('active');
-                if(btn.innerText.toLowerCase().includes(category) || (category === 'all' && btn.innerText === 'الكل')) {
-                    btn.classList.add('active');
-                }
-            });
-
-            // تحديث العناصر
-            items.forEach(item => {
-                // إضافة تأثير اختفاء
-                item.style.opacity = '0';
-                item.style.transform = 'scale(0.9)';
-                
-                setTimeout(() => {
-                    if(category === 'all' || item.classList.contains(category)) {
-                        item.style.display = 'block';
-                        setTimeout(() => {
-                            item.classList.add('show');
-                            item.style.opacity = '1';
-                            item.style.transform = 'scale(1)';
-                        }, 50);
-                    } else {
-                        item.style.display = 'none';
-                        item.classList.remove('show');
-                    }
-                }, 300);
-            });
+        function scrollToSec(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+            
+            // Update active dot
+            document.querySelectorAll('.side-nav span').forEach(dot => dot.classList.remove('active'));
+            event.target.classList.add('active');
         }
 
-        // تأثير الحركة عند أول تحميل
-        window.addEventListener('DOMContentLoaded', () => {
-            const items = document.querySelectorAll('.menu-item');
-            items.forEach((item, index) => {
-                setTimeout(() => {
-                    item.style.opacity = '1';
-                    item.style.transform = 'translateY(0)';
-                }, index * 100);
+        // انيميشن بسيط عند التمرير
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            sections.forEach(sec => {
+                const top = window.scrollY;
+                const offset = sec.offsetTop - 200;
+                const height = sec.offsetHeight;
+                
+                if (top >= offset && top < offset + height) {
+                    sec.querySelector('.section-image').style.transform = 'scale(1.1) rotate(-2deg)';
+                } else {
+                    sec.querySelector('.section-image').style.transform = 'scale(1) rotate(0deg)';
+                }
             });
         });
     </script>
