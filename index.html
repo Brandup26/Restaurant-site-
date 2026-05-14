@@ -3,173 +3,225 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Concept Store | تجربة بصرية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;700;900&display=swap" rel="stylesheet">
-    
+    <title>Menu Express | منيو احترافي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --accent: #ff4d4d;
-            --bg: #f4f4f4;
-            --text: #1a1a1a;
+            --bg-color: #f8f9fa;
+            --main-color: #2d3436;
+            --accent-color: #6c5ce7; /* لون انسيابي هادئ */
+            --text-gray: #636e72;
+            --white: #ffffff;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        
-        body { background: var(--bg); color: var(--text); overflow-x: hidden; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-        /* Navigation Vertical */
-        .side-nav {
-            position: fixed;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 100;
+        body {
+            background-color: var(--bg-color);
+            color: var(--main-color);
+            padding-bottom: 50px;
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 { font-size: 1.5rem; font-weight: 700; color: var(--accent-color); }
+
+        /* Horizontal Categories Bar */
+        .categories-wrapper {
+            background: var(--white);
+            padding: 15px 0;
+            overflow-x: auto;
+            white-space: nowrap;
+            display: flex;
+            gap: 15px;
+            padding-inline: 20px;
+            scrollbar-width: none; /* Hide scrollbar Firefox */
+            border-bottom: 1px solid #eee;
+        }
+
+        .categories-wrapper::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome */
+
+        .category-item {
             display: flex;
             flex-direction: column;
-            gap: 20px;
-        }
-
-        .side-nav span {
-            width: 12px;
-            height: 12px;
-            border: 2px solid var(--text);
-            border-radius: 50%;
+            align-items: center;
+            gap: 8px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.3s ease;
+            min-width: 80px;
         }
 
-        .side-nav span.active { background: var(--accent); border-color: var(--accent); height: 30px; border-radius: 10px; }
-
-        /* Full Screen Sections */
-        section {
-            height: 100vh;
-            width: 100%;
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            background: #f0f2f5;
+            border-radius: 20px;
             display: flex;
             align-items: center;
-            padding: 0 10%;
-            position: relative;
-        }
-
-        .section-content { width: 50%; z-index: 2; }
-
-        .section-content h2 { font-size: 5rem; line-height: 1; margin-bottom: 20px; font-weight: 900; }
-
-        .section-content p { font-size: 1.2rem; color: #555; margin-bottom: 30px; max-width: 400px; }
-
-        .section-image {
-            position: absolute;
-            right: 10%;
-            width: 45%;
-            height: 70vh;
-            background-size: cover;
-            background-position: center;
-            border-radius: 5px;
-            box-shadow: 50px 50px 0px rgba(0,0,0,0.05);
-            transition: 0.8s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-        }
-
-        /* Floating Price */
-        .price-tag {
-            position: absolute;
-            bottom: -20px;
-            left: -20px;
-            background: var(--accent);
-            color: white;
-            padding: 20px;
-            font-weight: bold;
+            justify-content: center;
             font-size: 1.5rem;
+            transition: all 0.3s ease;
         }
 
-        /* Sections Backgrounds & Colors */
-        #sec1 .section-image { background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800'); }
-        #sec2 .section-image { background-image: url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800'); right: auto; left: 10%; }
-        #sec2 .section-content { margin-right: auto; text-align: left; }
-        #sec3 .section-image { background-image: url('https://images.unsplash.com/photo-1567620905732-2d1ec7bb7445?auto=format&fit=crop&w=800'); }
-
-        /* Custom UI Buttons */
-        .order-btn {
-            padding: 15px 40px;
-            background: var(--text);
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            letter-spacing: 2px;
+        .category-item span {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-gray);
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .section-content h2 { font-size: 2.5rem; }
-            .section-content { width: 100%; text-align: center; }
-            .section-image { display: none; }
+        .category-item.active .category-icon {
+            background: var(--accent-color);
+            color: var(--white);
+            transform: scale(1.1);
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.2);
+        }
+
+        .category-item.active span { color: var(--accent-color); }
+
+        /* Items List */
+        .menu-container {
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .item-card {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.01);
+            animation: slideUp 0.5s ease forwards;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .item-details { flex: 1; }
+
+        .item-details h3 { font-size: 1.1rem; margin-bottom: 5px; }
+
+        .item-details p { font-size: 0.85rem; color: var(--text-gray); line-height: 1.4; }
+
+        .item-price {
+            font-weight: 700;
+            color: var(--accent-color);
+            background: #f0edff;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.95rem;
+        }
+
+        /* Loading Spinner */
+        #loader {
+            text-align: center;
+            padding: 50px;
+            color: var(--text-gray);
         }
     </style>
 </head>
 <body>
 
-    <div class="side-nav">
-        <span class="active" onclick="scrollToSec('sec1')"></span>
-        <span onclick="scrollToSec('sec2')"></span>
-        <span onclick="scrollToSec('sec3')"></span>
+    <header>
+        <h1>لايالي الشام</h1>
+    </header>
+
+    <!-- أقسام أفقية -->
+    <div class="categories-wrapper" id="categoryBar">
+        <!-- سيتم ملؤها بواسطة JS -->
     </div>
 
-    <section id="sec1">
-        <div class="section-content">
-            <h2>المشويات<br>الأصلية</h2>
-            <p>نختار أجود أنواع اللحوم لنقدمها لك بلمسة عصرية ونكهة تقليدية لا تُنسى.</p>
-            <button class="order-btn">عرض القائمة</button>
-        </div>
-        <div class="section-image">
-            <div class="price-tag">يبدأ من 350 LE</div>
-        </div>
-    </section>
-
-    <section id="sec2">
-        <div class="section-content">
-            <h2>إيطاليا<br>في طبق</h2>
-            <p>البيتزا المخبوزة في فرن الحطب مع أجبان مستوردة خصيصاً لتناسب ذوقك الرفيع.</p>
-            <button class="order-btn">اطلب الآن</button>
-        </div>
-        <div class="section-image">
-            <div class="price-tag">يبدأ من 180 LE</div>
-        </div>
-    </section>
-
-    <section id="sec3">
-        <div class="section-content">
-            <h2>حلويات<br>خرافية</h2>
-            <p>ختامها مسك مع تشكيلة من الحلويات العالمية المحضرة يومياً بكل حب.</p>
-            <button class="order-btn">تحلية اليوم</button>
-        </div>
-        <div class="section-image">
-            <div class="price-tag">يبدأ من 120 LE</div>
-        </div>
-    </section>
+    <!-- قائمة الأصناف -->
+    <div class="menu-container" id="menuContent">
+        <div id="loader">جاري تحميل المنيو بكل حب...</div>
+    </div>
 
     <script>
-        function scrollToSec(id) {
-            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-            
-            // Update active dot
-            document.querySelectorAll('.side-nav span').forEach(dot => dot.classList.remove('active'));
-            event.target.classList.add('active');
+        const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRzOW2Z2TFsXm8b7uV8QcVqY1HKF0Qq-Dxyeq2c6avxRsm9PjqXGvM4yyIWRV30DqblUB3BEMeXpI-a/pub?output=csv';
+        
+        let fullMenu = [];
+        const iconsMap = {
+            "فطور": "🍳", "شوربة": "🥣", "سلطة": "🥗", "مشاوي": "🍖", 
+            "بيتزا": "🍕", "مقبلات": "🍢", "مشروبات": "🍹", "حلويات": "🍰"
+        };
+
+        async function fetchMenu() {
+            try {
+                const response = await fetch(sheetURL);
+                const data = await response.text();
+                const rows = data.split('\n').slice(1); // تجاهل العنوان
+                
+                fullMenu = rows.map(row => {
+                    const columns = row.split(',');
+                    return {
+                        section: columns[0]?.trim(),
+                        name: columns[1]?.trim(),
+                        price: columns[2]?.trim(),
+                        desc: columns[3]?.trim() || "وصف شهي لهذا الصنف الرائع."
+                    };
+                }).filter(item => item.name);
+
+                renderCategories();
+                filterSection(fullMenu[0].section); // عرض أول قسم تلقائياً
+            } catch (error) {
+                document.getElementById('loader').innerText = "عذراً، فشل تحميل البيانات.";
+            }
         }
 
-        // انيميشن بسيط عند التمرير
-        window.addEventListener('scroll', () => {
-            const sections = document.querySelectorAll('section');
-            sections.forEach(sec => {
-                const top = window.scrollY;
-                const offset = sec.offsetTop - 200;
-                const height = sec.offsetHeight;
-                
-                if (top >= offset && top < offset + height) {
-                    sec.querySelector('.section-image').style.transform = 'scale(1.1) rotate(-2deg)';
-                } else {
-                    sec.querySelector('.section-image').style.transform = 'scale(1) rotate(0deg)';
-                }
-            });
-        });
+        function renderCategories() {
+            const sections = [...new Set(fullMenu.map(item => item.section))];
+            const bar = document.getElementById('categoryBar');
+            bar.innerHTML = sections.map((sec, index) => `
+                <div class="category-item ${index === 0 ? 'active' : ''}" onclick="filterSection('${sec}', this)">
+                    <div class="category-icon">${iconsMap[sec] || '🍽️'}</div>
+                    <span>${sec}</span>
+                </div>
+            `).join('');
+        }
+
+        function filterSection(sectionName, element) {
+            // تحديث الشكل النشط
+            if(element) {
+                document.querySelectorAll('.category-item').forEach(el => el.classList.remove('active'));
+                element.classList.add('active');
+            }
+
+            const container = document.getElementById('menuContent');
+            const filtered = fullMenu.filter(item => item.section === sectionName);
+
+            container.innerHTML = filtered.map(item => `
+                <div class="item-card">
+                    <div class="item-details">
+                        <h3>${item.name}</h3>
+                        <p>${item.desc}</p>
+                    </div>
+                    <div class="item-price">${item.price} ج.م</div>
+                </div>
+            `).join('');
+        }
+
+        fetchMenu();
     </script>
 </body>
 </html>
