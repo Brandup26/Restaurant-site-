@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu Express | منيو احترافي</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>ليالي الشام | منيو مطور</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f8f9fa;
-            --main-color: #2d3436;
-            --accent-color: #6c5ce7; /* لون انسيابي هادئ */
-            --text-gray: #636e72;
-            --white: #ffffff;
+            --bg: #fdfdfd;
+            --main-text: #2d3436;
+            --desc-text: #7f8c8d; /* لون الوصف المختلف */
+            --accent: #e67e22; /* لون برتقالي فاتح للشهية */
+            --card-bg: #ffffff;
         }
 
         * {
@@ -19,209 +19,181 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Cairo', sans-serif;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--main-color);
-            padding-bottom: 50px;
+            background-color: var(--bg);
+            color: var(--main-text);
         }
 
-        /* Header */
         header {
-            background: var(--white);
-            padding: 20px;
+            padding: 30px 20px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            background: white;
         }
 
-        header h1 { font-size: 1.5rem; font-weight: 700; color: var(--accent-color); }
+        header h1 { font-weight: 800; font-size: 1.8rem; color: var(--main-text); }
 
-        /* Horizontal Categories Bar */
-        .categories-wrapper {
-            background: var(--white);
-            padding: 15px 0;
+        /* الأقسام الأفقية */
+        .category-nav {
+            display: flex;
             overflow-x: auto;
             white-space: nowrap;
-            display: flex;
+            padding: 10px 20px 20px;
             gap: 15px;
-            padding-inline: 20px;
-            scrollbar-width: none; /* Hide scrollbar Firefox */
-            border-bottom: 1px solid #eee;
+            scrollbar-width: none;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 100;
+            box-shadow: 0 10px 15px -10px rgba(0,0,0,0.05);
         }
 
-        .categories-wrapper::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome */
+        .category-nav::-webkit-scrollbar { display: none; }
 
-        .category-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
+        .cat-item {
+            padding: 10px 25px;
+            background: #f1f2f6;
+            border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            min-width: 80px;
-        }
-
-        .category-icon {
-            width: 60px;
-            height: 60px;
-            background: #f0f2f5;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .category-item span {
-            font-size: 0.9rem;
             font-weight: 600;
-            color: var(--text-gray);
+            transition: 0.3s ease;
+            font-size: 0.9rem;
+            color: var(--desc-text);
         }
 
-        .category-item.active .category-icon {
-            background: var(--accent-color);
-            color: var(--white);
-            transform: scale(1.1);
-            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.2);
+        .cat-item.active {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 5px 15px rgba(230, 126, 34, 0.3);
         }
 
-        .category-item.active span { color: var(--accent-color); }
-
-        /* Items List */
-        .menu-container {
+        /* قائمة الطعام */
+        .menu-list {
             padding: 20px;
-            max-width: 600px;
+            max-width: 700px;
             margin: auto;
         }
 
-        .item-card {
-            background: var(--white);
-            border-radius: 25px;
-            padding: 15px;
-            margin-bottom: 15px;
+        .food-card {
+            background: var(--card-bg);
+            padding: 18px;
+            margin-bottom: 12px;
+            border-radius: 18px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
-            border: 1px solid rgba(0,0,0,0.01);
-            animation: slideUp 0.5s ease forwards;
+            border: 1px solid #f0f0f0;
+            animation: fadeIn 0.4s ease forwards;
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .item-details { flex: 1; }
+        .food-info {
+            display: flex;
+            flex-direction: column; /* جعل العناصر تحت بعضها */
+            gap: 4px; /* مسافة بسيطة بين الاسم والوصف */
+        }
 
-        .item-details h3 { font-size: 1.1rem; margin-bottom: 5px; }
-
-        .item-details p { font-size: 0.85rem; color: var(--text-gray); line-height: 1.4; }
-
-        .item-price {
+        .food-name {
             font-weight: 700;
-            color: var(--accent-color);
-            background: #f0edff;
-            padding: 8px 15px;
-            border-radius: 15px;
-            font-size: 0.95rem;
+            font-size: 1.1rem;
+            color: var(--main-text);
         }
 
-        /* Loading Spinner */
-        #loader {
-            text-align: center;
-            padding: 50px;
-            color: var(--text-gray);
+        /* ستايل الوصف اللي طلبته */
+        .food-desc {
+            font-size: 0.85rem; /* خط أصغر */
+            color: var(--desc-text); /* لون مختلف */
+            font-weight: 400;
+            line-height: 1.3;
+            max-width: 250px; /* لا يأخذ مساحة السعر */
         }
+
+        .food-price {
+            font-weight: 800;
+            color: var(--accent);
+            font-size: 1rem;
+            min-width: 80px;
+            text-align: left;
+        }
+
+        #loader { text-align: center; margin-top: 50px; color: var(--desc-text); }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>لايالي الشام</h1>
+        <h1>ليالي الشام</h1>
     </header>
 
-    <!-- أقسام أفقية -->
-    <div class="categories-wrapper" id="categoryBar">
-        <!-- سيتم ملؤها بواسطة JS -->
-    </div>
+    <div class="category-nav" id="catNav"></div>
 
-    <!-- قائمة الأصناف -->
-    <div class="menu-container" id="menuContent">
-        <div id="loader">جاري تحميل المنيو بكل حب...</div>
+    <div class="menu-list" id="menuList">
+        <div id="loader">تحميل قائمة الطعام...</div>
     </div>
 
     <script>
-        const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRzOW2Z2TFsXm8b7uV8QcVqY1HKF0Qq-Dxyeq2c6avxRsm9PjqXGvM4yyIWRV30DqblUB3BEMeXpI-a/pub?output=csv';
-        
-        let fullMenu = [];
-        const iconsMap = {
-            "فطور": "🍳", "شوربة": "🥣", "سلطة": "🥗", "مشاوي": "🍖", 
-            "بيتزا": "🍕", "مقبلات": "🍢", "مشروبات": "🍹", "حلويات": "🍰"
-        };
+        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRzOW2Z2TFsXm8b7uV8QcVqY1HKF0Qq-Dxyeq2c6avxRsm9PjqXGvM4yyIWRV30DqblUB3BEMeXpI-a/pub?output=csv';
+        let menuData = [];
 
-        async function fetchMenu() {
+        async function loadMenu() {
             try {
-                const response = await fetch(sheetURL);
+                const response = await fetch(csvUrl);
                 const data = await response.text();
-                const rows = data.split('\n').slice(1); // تجاهل العنوان
+                const rows = data.split('\n').slice(1);
                 
-                fullMenu = rows.map(row => {
-                    const columns = row.split(',');
+                menuData = rows.map(row => {
+                    const col = row.split(',');
                     return {
-                        section: columns[0]?.trim(),
-                        name: columns[1]?.trim(),
-                        price: columns[2]?.trim(),
-                        desc: columns[3]?.trim() || "وصف شهي لهذا الصنف الرائع."
+                        category: col[0]?.trim(),
+                        name: col[1]?.trim(),
+                        price: col[2]?.trim(),
+                        desc: col[3]?.trim() || "" // الوصف من العمود الرابع
                     };
-                }).filter(item => item.name);
+                }).filter(i => i.name);
 
-                renderCategories();
-                filterSection(fullMenu[0].section); // عرض أول قسم تلقائياً
-            } catch (error) {
-                document.getElementById('loader').innerText = "عذراً، فشل تحميل البيانات.";
+                renderNav();
+                showCategory(menuData[0].category);
+            } catch (e) {
+                document.getElementById('loader').innerText = "خطأ في الاتصال بالبيانات";
             }
         }
 
-        function renderCategories() {
-            const sections = [...new Set(fullMenu.map(item => item.section))];
-            const bar = document.getElementById('categoryBar');
-            bar.innerHTML = sections.map((sec, index) => `
-                <div class="category-item ${index === 0 ? 'active' : ''}" onclick="filterSection('${sec}', this)">
-                    <div class="category-icon">${iconsMap[sec] || '🍽️'}</div>
-                    <span>${sec}</span>
+        function renderNav() {
+            const categories = [...new Set(menuData.map(i => i.category))];
+            const nav = document.getElementById('catNav');
+            nav.innerHTML = categories.map((cat, idx) => `
+                <div class="cat-item ${idx === 0 ? 'active' : ''}" onclick="showCategory('${cat}', this)">
+                    ${cat}
                 </div>
             `).join('');
         }
 
-        function filterSection(sectionName, element) {
-            // تحديث الشكل النشط
-            if(element) {
-                document.querySelectorAll('.category-item').forEach(el => el.classList.remove('active'));
-                element.classList.add('active');
+        function showCategory(catName, el) {
+            if(el) {
+                document.querySelectorAll('.cat-item').forEach(btn => btn.classList.remove('active'));
+                el.classList.add('active');
             }
 
-            const container = document.getElementById('menuContent');
-            const filtered = fullMenu.filter(item => item.section === sectionName);
+            const list = document.getElementById('menuList');
+            const items = menuData.filter(i => i.category === catName);
 
-            container.innerHTML = filtered.map(item => `
-                <div class="item-card">
-                    <div class="item-details">
-                        <h3>${item.name}</h3>
-                        <p>${item.desc}</p>
+            list.innerHTML = items.map(item => `
+                <div class="food-card">
+                    <div class="food-info">
+                        <span class="food-name">${item.name}</span>
+                        ${item.desc ? `<span class="food-desc">${item.desc}</span>` : ''}
                     </div>
-                    <div class="item-price">${item.price} ج.م</div>
+                    <div class="food-price">${item.price} ج.م</div>
                 </div>
             `).join('');
         }
 
-        fetchMenu();
+        loadMenu();
     </script>
 </body>
 </html>
