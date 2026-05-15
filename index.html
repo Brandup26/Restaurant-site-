@@ -81,7 +81,6 @@
             display: flex; align-items: center; justify-content: center; position: relative;
         }
         
-        /* أنميشن السلة الأصلي المرن */
         .badge {
             position: absolute; top: -5px; right: -5px; background: #ff3b30;
             color: white; font-size: 10px; font-weight: 800; width: 20px; height: 20px;
@@ -123,7 +122,6 @@
         .price-row { display: flex; justify-content: space-between; align-items: center; }
         .food-price { font-weight: 800; color: var(--accent); font-size: 0.95rem; }
         
-        /* زرار الإضافة مع توسيط علامة الزائد بالظبط */
         .add-btn { 
             background: var(--accent); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; 
             font-size: 1.4rem; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold;
@@ -136,7 +134,6 @@
         }
         .added-notice.show { opacity: 1; transform: translateX(0); }
 
-        /* أنميشن الطيران البسيط السريع */
         .fly-item {
             position: fixed; z-index: 9999; pointer-events: none;
             width: 30px; height: 30px; background: var(--accent);
@@ -145,7 +142,7 @@
             transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        /* --- تذييل الصفحة (Footer) --- */
+        /* --- Footer --- */
         .restaurant-footer {
             padding: 30px 20px; text-align: center; background: var(--white);
             border-top: 1px solid rgba(0,0,0,0.05); margin-top: 20px;
@@ -250,6 +247,20 @@
             document.getElementById('themeBtn').innerText = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
         }
 
+        // وظيفة التحميل المسبق للصور لضمان عدم وجود تأخير
+        function preloadImages(data) {
+            data.forEach(item => {
+                const img = new Image();
+                img.src = item.img;
+            });
+            // أيضاً تحميل صور الأقسام
+            const cats = [...new Set(data.map(i => i.category))];
+            cats.forEach(c => {
+                const img = new Image();
+                img.src = `${IMAGES_PATH}${c}.jpg`;
+            });
+        }
+
         async function loadMenu() {
             try {
                 const response = await fetch(csvUrl);
@@ -259,6 +270,10 @@
                     const col = row.split(',');
                     return { category: col[0]?.trim(), name: col[1]?.trim(), price: col[2]?.trim(), desc: col[3]?.trim() || "", img: `${IMAGES_PATH}${col[1]?.trim()}.jpg` };
                 }).filter(i => i.name);
+                
+                // بدء التحميل المسبق فور استلام البيانات
+                preloadImages(menuData);
+                
                 renderNav();
                 setTimeout(() => document.getElementById('splash-screen').classList.add('splash-hidden'), 2500);
             } catch (e) { document.getElementById('splash-screen').classList.add('splash-hidden'); }
@@ -293,7 +308,6 @@
             `).join('');
         }
 
-        // إرجاع أنميشن الطيران البسيط بالكامل
         function addToCart(e, btn, name, price, img) {
             cart.push({name, price, img});
             const notice = btn.previousElementSibling;
@@ -314,7 +328,6 @@
                 fly.style.transform = 'scale(0.2)';
                 fly.style.opacity = '0';
             }, 10);
-
             setTimeout(() => { fly.remove(); updateCart(); }, 700);
         }
 
@@ -344,24 +357,19 @@
             if(cart.length === 0) toggleCart(false);
         }
 
-        // التحكم في فتح وغلق السلة مع معالجة زر الرجوع بالتليفون لمنع الخروج
         function toggleCart(s) { 
             const modal = document.getElementById('cartModal');
             if (s) {
                 modal.style.display = 'flex';
-                // تسجيل خطوة وهمية في تاريخ التصفح لمنع الخروج عند الرجوع
                 history.pushState({ cartOpen: true }, "");
             } else {
                 modal.style.display = 'none';
             }
         }
 
-        // الاستماع لزر الرجوع الخاص بالتليفون
         window.addEventListener('popstate', function (event) {
             const modal = document.getElementById('cartModal');
-            if (modal.style.display === 'flex') {
-                modal.style.display = 'none'; // يقفل السلة بدل الخروج من الموقع
-            }
+            if (modal.style.display === 'flex') { modal.style.display = 'none'; }
         });
 
         function sendToWA() {
