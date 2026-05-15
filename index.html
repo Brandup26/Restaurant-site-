@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ليالي الشام | المنيو الرسمي</title>
+    <title>أبو خضر | المنيو الرسمي</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -33,8 +33,11 @@
             object-fit: cover; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
         .loader-text { font-weight: 800; color: var(--accent); font-size: 1.5rem; opacity: 0; animation: fadeIn 1s forwards 0.5s; }
-        .loading-bar { width: 140px; height: 4px; background: #eee; margin: 20px auto; border-radius: 10px; overflow: hidden; }
-        .loading-bar span { display: block; width: 0; height: 100%; background: var(--accent); animation: progress 2.5s forwards; }
+        .loading-bar { width: 160px; height: 5px; background: #eee; margin: 25px auto; border-radius: 10px; overflow: hidden; position: relative; }
+        .loading-bar span { 
+            display: block; width: 0; height: 100%; background: var(--accent); 
+            animation: progress 2.5s linear forwards; /* الشريط يكتمل في 2.5 ثانية */
+        }
         
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -95,9 +98,10 @@
 
         .added-notice {
             position: absolute; right: 45px; background: rgba(52, 199, 89, 0.15);
-            color: var(--success); font-size: 0.75rem; font-weight: 800;
+            color: var(--success); font-size: 0.7rem; font-weight: 800;
             padding: 4px 10px; border-radius: 10px; opacity: 0;
             transform: translateX(10px); transition: 0.4s ease; pointer-events: none;
+            white-space: nowrap;
         }
         .added-notice.show { opacity: 1; transform: translateX(0); }
 
@@ -156,7 +160,7 @@
     <div id="splash-screen">
         <div class="loader-content">
             <img src="./images/logooo.jpg" class="loader-logo" onerror="this.style.display='none'">
-            <h2 class="loader-text">ليالي الشام</h2>
+            <h2 class="loader-text">أبو خضر</h2>
             <div class="loading-bar"><span></span></div>
         </div>
     </div>
@@ -166,7 +170,7 @@
             <span class="badge" id="cartBadge">0</span>
             <span style="font-size: 1.4rem;">🛒</span>
         </div>
-        <h1>ليالي الشام</h1>
+        <h1>أبو خضر</h1>
     </header>
 
     <div class="category-nav" id="catNav"></div>
@@ -211,16 +215,16 @@
                         price: col[2]?.trim(),
                         desc: col[3]?.trim() || "",
                         img: `${IMAGES_PATH}${col[1]?.trim()}.jpg`,
-                        catImg: `${IMAGES_PATH}${col[0]?.trim()}.trim().jpg`
+                        catImg: `${IMAGES_PATH}${col[0]?.trim()}.jpg`
                     };
                 }).filter(i => i.name);
                 
                 renderNav();
                 
-                // إخفاء شاشة الترحيب بعد التحميل
+                // شاشة الترحيب تفتح لمدة 2.5 ثانية (نفس مدة الشريط) ثم تختفي
                 setTimeout(() => {
                     document.getElementById('splash-screen').classList.add('splash-hidden');
-                }, 2000);
+                }, 2500);
 
             } catch (e) {
                 document.getElementById('splash-screen').classList.add('splash-hidden');
@@ -252,7 +256,7 @@
                         <span class="food-desc">${item.desc}</span>
                         <div class="price-row">
                             <span class="food-price">${item.price} ج.م</span>
-                            <span class="added-notice">تم ✅</span>
+                            <span class="added-notice">تم الطلب ✅</span>
                             <button class="add-btn" onclick="addToCart(event, this, '${item.name}', ${item.price}, '${item.img}')">+</button>
                         </div>
                     </div>
@@ -262,10 +266,13 @@
 
         function addToCart(e, btn, name, price, img) {
             cart.push({name, price, img});
+            
+            // تنبيه الإضافة بجانب الزرار يظهر لمدة ثانيتين
             const notice = btn.previousElementSibling;
             notice.classList.add('show');
-            setTimeout(() => notice.classList.remove('show'), 1500);
+            setTimeout(() => notice.classList.remove('show'), 2000);
 
+            // أنميشن الطيران
             const fly = document.createElement('div');
             fly.className = 'fly-item';
             fly.innerHTML = '🍔';
@@ -319,7 +326,7 @@
         function sendToWA() {
             const n = document.getElementById('uName').value, p = document.getElementById('uPhone').value, a = document.getElementById('uAddr').value;
             if(!n || !p || !a || cart.length === 0) return alert("اكمل البيانات");
-            let msg = `طلب جديد - ليالي الشام\nالاسم: ${n}\nالموبايل: ${p}\nالعنوان: ${a}\n\nالطلبات:\n`;
+            let msg = `طلب جديد - مطعم أبو خضر\nالاسم: ${n}\nالموبايل: ${p}\nالعنوان: ${a}\n\nالطلبات:\n`;
             let total = 0;
             cart.forEach(i => { msg += `- ${i.name} (${i.price} ج.م)\n`; total += parseFloat(i.price); });
             msg += `\nالإجمالي: ${total} ج.م`;
