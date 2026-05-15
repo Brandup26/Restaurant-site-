@@ -7,12 +7,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #e0e0e5; /* خلفية مريحة للعين وأغمق بسيطة */
+            --bg: #e0e0e5; 
             --main-text: #1c1c1e;
             --desc-text: #636366;
             --accent: #d35400;
             --address-tag: #0a84ff;
-            --white: #f2f2f7; /* كروت أغمق بنسبة بسيطة ومتناسقة */
+            --white: #f2f2f7; 
             --glass: rgba(242, 242, 247, 0.8);
             --success: #34c759;
             --header-bg: #f2f2f7;
@@ -76,9 +76,20 @@
         }
 
         .cart-trigger-container { position: absolute; left: 20px; top: 0; }
+        
+        /* أنميشن الاهتزاز والمرونة المطلوب للسلة */
         .cart-trigger {
             width: 45px; height: 45px; background: var(--bg); border-radius: 14px;
             display: flex; align-items: center; justify-content: center; position: relative;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .cart-trigger.shake {
+            animation: cartShake 0.5s ease-in-out;
+        }
+        @keyframes cartShake {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            20%, 60% { transform: scale(1.15) rotate(-10deg); }
+            40%, 80% { transform: scale(1.15) rotate(10deg); }
         }
         
         .badge {
@@ -241,6 +252,7 @@
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRzOW2Z2TFsXm8b7uV8QcVqY1HKF0Qq-Dxyeq2c6avxRsm9PjqXGvM4yyIWRV30DqblUB3BEMeXpI-a/pub?output=csv';
         const IMAGES_PATH = "./images/"; 
         let menuData = [], cart = [];
+        let currentTotal = 0; // متوافق لحساب الإجمالي النهائي
 
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
@@ -317,23 +329,31 @@
             fly.style.top = e.clientY + 'px';
             document.body.appendChild(fly);
 
-            const cartPos = document.getElementById('cartBtn').getBoundingClientRect();
+            const cartBtn = document.getElementById('cartBtn');
+            const cartPos = cartBtn.getBoundingClientRect();
             setTimeout(() => {
                 fly.style.left = (cartPos.left + 20) + 'px';
                 fly.style.top = (cartPos.top + 20) + 'px';
                 fly.style.transform = 'scale(0.2)';
                 fly.style.opacity = '0';
             }, 10);
-            setTimeout(() => { fly.remove(); updateCart(); }, 700);
+            
+            setTimeout(() => { 
+                fly.remove(); 
+                updateCart();
+                // تشغيل أنميشن الاهتزاز المرتد للسلة
+                cartBtn.classList.add('shake');
+                setTimeout(() => cartBtn.classList.remove('shake'), 500);
+            }, 700);
         }
 
         function updateCart() {
             const badge = document.getElementById('cartBadge');
             badge.innerText = cart.length;
             badge.classList.toggle('show', cart.length > 0);
-            let total = 0;
+            currentTotal = 0;
             document.getElementById('cartItemsList').innerHTML = cart.map((item, idx) => {
-                total += parseFloat(item.price);
+                currentTotal += parseFloat(item.price);
                 return `
                 <div class="cart-item-card">
                     <img src="${item.img}" class="cart-item-img" onerror="this.src='${IMAGES_PATH}default.jpg'">
@@ -344,7 +364,7 @@
                     <span class="remove-btn" onclick="removeFromCart(${idx})">حذف</span>
                 </div>`;
             }).join('');
-            document.getElementById('totalAmount').innerText = `${total} ج.م`;
+            document.getElementById('totalAmount').innerText = `${currentTotal} ج.م`;
         }
 
         function removeFromCart(idx) {
@@ -371,7 +391,12 @@
         function sendToWA() {
             const n = document.getElementById('uName').value, p = document.getElementById('uPhone').value, a = document.getElementById('uAddr').value;
             if(!n || !p || !a || cart.length === 0) return alert("يرجى إكمال البيانات واختيار الأصناف");
-            let msg = `طلب جديد - مطعم أبو خضر\nالاسم: ${n}\nالموبايل: ${p}\nالعنوان: ${a}\n\nالطلبات:\n` + cart.map(i => `- ${i.name} (${i.price} ج.م)`).join('\n');
+            
+            // تم تعديل شكل ومحتوى الرسالة هنا بإضافة الرموز التعبيرية وحساب الإجمالي في آخرها
+            let msg = `طلب جديد - مطعم أبو خضر\n\n👤 الاسم: ${n}\n📱 الموبايل: ${p}\n📍 العنوان: ${a}\n\nالطلبات:\n` 
+                      + cart.map(i => `- ${i.name} (${i.price} ج.م)`).join('\n')
+                      + `\n\n💰 الإجمالي: ${currentTotal} ج.م`;
+                      
             window.open(`https://wa.me/201000452121?text=${encodeURIComponent(msg)}`);
         }
 
