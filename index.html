@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>أبو خضر | المنيو الرسمي</title>
+    
+    <link rel="manifest" href="manifest.json">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="أبو خضر">
+    <link rel="apple-touch-icon" href="images/logooo.jpg">
+    
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -77,7 +85,6 @@
 
         .cart-trigger-container { position: absolute; left: 20px; top: 0; }
         
-        /* أنميشن الاهتزاز والمرونة المطلوب للسلة */
         .cart-trigger {
             width: 45px; height: 45px; background: var(--bg); border-radius: 14px;
             display: flex; align-items: center; justify-content: center; position: relative;
@@ -252,7 +259,14 @@
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRzOW2Z2TFsXm8b7uV8QcVqY1HKF0Qq-Dxyeq2c6avxRsm9PjqXGvM4yyIWRV30DqblUB3BEMeXpI-a/pub?output=csv';
         const IMAGES_PATH = "./images/"; 
         let menuData = [], cart = [];
-        let currentTotal = 0; // متوافق لحساب الإجمالي النهائي
+        let currentTotal = 0; 
+
+        // كود برمجي لتسجيل الـ Service Worker لتفعيل الأبلكيشن على المتصفحات
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed:', err));
+            });
+        }
 
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
@@ -341,7 +355,6 @@
             setTimeout(() => { 
                 fly.remove(); 
                 updateCart();
-                // تشغيل أنميشن الاهتزاز المرتد للسلة
                 cartBtn.classList.add('shake');
                 setTimeout(() => cartBtn.classList.remove('shake'), 500);
             }, 700);
@@ -392,7 +405,6 @@
             const n = document.getElementById('uName').value, p = document.getElementById('uPhone').value, a = document.getElementById('uAddr').value;
             if(!n || !p || !a || cart.length === 0) return alert("يرجى إكمال البيانات واختيار الأصناف");
             
-            // تم تعديل شكل ومحتوى الرسالة هنا بإضافة الرموز التعبيرية وحساب الإجمالي في آخرها
             let msg = `طلب جديد - مطعم أبو خضر\n\n👤 الاسم: ${n}\n📱 الموبايل: ${p}\n📍 العنوان: ${a}\n\nالطلبات:\n` 
                       + cart.map(i => `- ${i.name} (${i.price} ج.م)`).join('\n')
                       + `\n\n💰 الإجمالي: ${currentTotal} ج.م`;
