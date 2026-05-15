@@ -7,123 +7,150 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #f2f2f7; /* لون خلفية آيفون */
+            --bg: #f2f2f7;
             --main-text: #1c1c1e;
             --desc-text: #8e8e93;
             --accent: #d35400;
             --white: #ffffff;
-            --glass: rgba(255, 255, 255, 0.8);
+            --glass: rgba(255, 255, 255, 0.7);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg); color: var(--main-text); line-height: 1.6; }
 
+        /* الهيدر مع السلة فوق عالشمال */
         header { 
-            padding: 20px; text-align: center; background: var(--white); 
-            box-shadow: 0 1px 0 rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100;
+            padding: 15px 20px; background: var(--white); 
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 1000; box-shadow: 0 1px 0 rgba(0,0,0,0.05);
         }
-        header h1 { font-weight: 800; font-size: 1.4rem; color: var(--accent); }
+        header h1 { font-weight: 800; font-size: 1.3rem; color: var(--accent); flex: 1; text-align: center; margin-right: -40px; }
 
+        /* أيقونة السلة فوق على الشمال */
+        .cart-icon-wrapper {
+            width: 45px; height: 45px; background: var(--bg); border-radius: 14px;
+            display: flex; align-items: center; justify-content: center; position: relative;
+            cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .cart-icon-wrapper:active { transform: scale(0.9); }
+        .cart-count-badge {
+            position: absolute; top: -5px; right: -5px; background: #ff3b30;
+            color: white; font-size: 10px; font-weight: 800; width: 18px; height: 18px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            border: 2px solid var(--white); visibility: hidden;
+        }
+        .cart-count-badge.show { visibility: visible; animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+        /* أنميشن اهتزاز السلة */
+        @keyframes cartWobble {
+            0%, 100% { transform: rotate(0); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
+        }
+        .wobble { animation: cartWobble 0.4s ease-in-out; }
+
+        /* الأقسام والقائمة */
         .category-nav {
             display: flex; overflow-x: auto; white-space: nowrap; padding: 15px 10px; gap: 15px;
             scrollbar-width: none; background: var(--glass); backdrop-filter: blur(20px);
-            position: sticky; top: 65px; z-index: 99; border-bottom: 0.5px solid rgba(0,0,0,0.1);
+            position: sticky; top: 76px; z-index: 999; border-bottom: 0.5px solid rgba(0,0,0,0.1);
         }
         .category-nav::-webkit-scrollbar { display: none; }
-
-        .cat-item { display: flex; flex-direction: column; align-items: center; min-width: 80px; cursor: pointer; }
-        .cat-img-box {
-            width: 60px; height: 60px; border-radius: 18px; background: #e5e5ea; margin-bottom: 8px;
-            overflow: hidden; border: 2px solid transparent; transition: 0.3s;
-        }
+        .cat-item { display: flex; flex-direction: column; align-items: center; min-width: 80px; }
+        .cat-img-box { width: 55px; height: 55px; border-radius: 16px; background: #e5e5ea; overflow: hidden; border: 2.5px solid transparent; transition: 0.3s; }
         .cat-img-box img { width: 100%; height: 100%; object-fit: cover; }
         .cat-item.active .cat-img-box { border-color: var(--accent); transform: scale(1.05); }
-        .cat-item span { font-size: 0.75rem; font-weight: 700; color: var(--desc-text); }
+        .cat-item span { font-size: 0.75rem; font-weight: 700; color: var(--desc-text); margin-top: 5px; }
         .cat-item.active span { color: var(--accent); }
 
-        .menu-list { padding: 15px; padding-bottom: 100px; max-width: 600px; margin: auto; }
+        .menu-list { padding: 15px; max-width: 600px; margin: auto; }
         .food-card {
             background: var(--white); border-radius: 20px; margin-bottom: 12px; display: flex;
-            padding: 12px; gap: 12px; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            padding: 12px; gap: 12px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.03);
         }
-        .item-img-box { width: 90px; height: 90px; border-radius: 15px; overflow: hidden; background: #f2f2f7; flex-shrink: 0; }
+        .item-img-box { width: 85px; height: 85px; border-radius: 15px; overflow: hidden; background: #f2f2f7; flex-shrink: 0; }
         .item-img-box img { width: 100%; height: 100%; object-fit: cover; }
 
         .food-info { flex: 1; }
-        .food-name { font-weight: 700; font-size: 1rem; margin-bottom: 2px; display: block; }
-        .food-desc { font-size: 0.8rem; color: var(--desc-text); line-height: 1.3; display: block; margin-bottom: 6px; }
-        
+        .food-name { font-weight: 700; font-size: 1rem; color: #000; }
+        .food-desc { font-size: 0.8rem; color: var(--desc-text); line-height: 1.3; margin: 4px 0; }
         .price-row { display: flex; justify-content: space-between; align-items: center; }
         .food-price { font-weight: 800; color: var(--accent); font-size: 0.95rem; }
-        
+
+        /* زر الطلب مع أنميشن الـ Pop */
         .add-btn {
-            background: var(--accent); color: white; border: none; width: 32px; height: 32px;
-            border-radius: 50%; font-size: 1.2rem; font-weight: bold; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; transition: 0.2s;
+            background: var(--accent); color: white; border: none; width: 34px; height: 34px;
+            border-radius: 50%; font-size: 1.3rem; font-weight: bold; cursor: pointer;
+            transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; align-items: center; justify-content: center;
         }
-        .add-btn:active { transform: scale(0.9); }
+        .add-btn:active { transform: scale(0.8); }
 
-        /* أيقونة السلة العائمة */
-        #cart-fab {
-            position: fixed; bottom: 30px; left: 30px; background: var(--accent);
-            color: white; padding: 15px 25px; border-radius: 30px; font-weight: 700;
-            box-shadow: 0 10px 25px rgba(211, 84, 0, 0.3); z-index: 1000;
-            display: none; align-items: center; gap: 10px; cursor: pointer;
+        @keyframes pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
-        /* نافذة السلة */
+        /* نافذة السلة (Bottom Sheet) */
         .cart-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 2000; display: none;
+            background: rgba(0,0,0,0.4); z-index: 2000; display: none;
             justify-content: center; align-items: flex-end;
         }
         .cart-content {
             background: var(--white); width: 100%; max-width: 500px; padding: 25px;
             border-radius: 30px 30px 0 0; max-height: 85vh; overflow-y: auto;
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .cart-item-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 0.5px solid #eee; }
-        .del-btn { color: #ff3b30; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-        .user-data { margin-top: 25px; display: flex; flex-direction: column; gap: 12px; }
+        .cart-header { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .cart-item-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 0.5px solid #f2f2f7; }
+        .del-btn { color: #ff3b30; font-weight: 700; font-size: 0.85rem; }
+
+        .user-data { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
         .user-data input {
-            background: #f2f2f7; border: none; padding: 15px; border-radius: 12px;
+            background: #f2f2f7; border: none; padding: 16px; border-radius: 14px;
             font-size: 0.9rem; outline: none; text-align: right;
         }
         .order-btn {
             background: #34c759; color: white; border: none; padding: 18px;
-            border-radius: 15px; font-weight: 800; font-size: 1rem; margin-top: 20px; cursor: pointer;
+            border-radius: 16px; font-weight: 800; font-size: 1.1rem; margin-top: 20px; cursor: pointer; width: 100%;
         }
+
+        #loader { text-align: center; padding: 50px; color: #ccc; }
     </style>
 </head>
 <body>
 
-    <header><h1>ليالي الشام</h1></header>
+    <header>
+        <div class="cart-icon-wrapper" onclick="toggleCart(true)" id="cartIcon">
+            <span class="cart-count-badge" id="cartCount">0</span>
+            <span style="font-size: 1.4rem;">🛒</span>
+        </div>
+        <h1>ليالي الشام</h1>
+    </header>
+
     <div class="category-nav" id="catNav"></div>
 
     <div class="menu-list" id="menuList">
-        <div id="loader" style="text-align: center; margin-top: 50px;">بنجيب لك المنيو...</div>
+        <div id="loader">يرجى الانتظار...</div>
     </div>
 
-    <div id="cart-fab" onclick="toggleCart(true)">
-        🛒 <span id="cart-count">0</span> طلبات
-    </div>
-
-    <div class="cart-modal" id="cartModal">
+    <div class="cart-modal" id="cartModal" onclick="if(event.target==this) toggleCart(false)">
         <div class="cart-content">
             <div class="cart-header">
-                <h3>سلة الطلبات</h3>
-                <span onclick="toggleCart(false)" style="cursor:pointer; font-weight: 800;">إغلاق</span>
+                <h3 style="font-weight: 800;">طلباتك</h3>
+                <span onclick="toggleCart(false)" style="color: var(--accent); font-weight: 700; cursor:pointer;">إغلاق</span>
             </div>
             <div id="cartItemsList"></div>
-            
+            <div id="totalPrice" style="text-align: left; padding: 15px 0; font-weight: 800; color: var(--accent);"></div>
             <div class="user-data">
                 <input type="text" id="userName" placeholder="الاسم بالكامل">
-                <input type="tel" id="userPhone" placeholder="رقم الهاتف">
+                <input type="tel" id="userPhone" placeholder="رقم الموبايل">
                 <input type="text" id="userAddress" placeholder="العنوان بالتفصيل">
             </div>
-            <button class="order-btn" onclick="sendOrder()">إرسال الطلب عبر واتساب</button>
+            <button class="order-btn" onclick="sendOrder()">إتمام الطلب</button>
         </div>
     </div>
 
@@ -151,7 +178,7 @@
                 }).filter(i => i.name);
                 renderNav();
                 showCategory(menuData[0].category);
-            } catch (e) { document.getElementById('loader').innerText = "خطأ في التحميل"; }
+            } catch (e) { document.getElementById('loader').innerText = "خطأ في الاتصال"; }
         }
 
         function renderNav() {
@@ -178,7 +205,7 @@
                         <span class="food-desc">${item.desc}</span>
                         <div class="price-row">
                             <span class="food-price">${item.price} ج.م</span>
-                            <button class="add-btn" onclick="addToCart('${item.name}', '${item.price}')">+</button>
+                            <button class="add-btn" onclick="addToCart('${item.name}', ${item.price})">+</button>
                         </div>
                     </div>
                 </div>
@@ -187,26 +214,42 @@
 
         function addToCart(name, price) {
             cart.push({name, price});
+            animateCart();
             updateCartUI();
         }
 
+        function animateCart() {
+            const icon = document.getElementById('cartIcon');
+            const badge = document.getElementById('cartCount');
+            icon.classList.add('wobble');
+            badge.classList.add('show');
+            setTimeout(() => icon.classList.remove('wobble'), 400);
+        }
+
         function updateCartUI() {
-            const count = cart.length;
-            document.getElementById('cart-count').innerText = count;
-            document.getElementById('cart-fab').style.display = count > 0 ? 'flex' : 'none';
-            
-            document.getElementById('cartItemsList').innerHTML = cart.map((item, idx) => `
+            document.getElementById('cartCount').innerText = cart.length;
+            let total = 0;
+            document.getElementById('cartItemsList').innerHTML = cart.map((item, idx) => {
+                total += parseFloat(item.price);
+                return `
                 <div class="cart-item-row">
-                    <span>${item.name} (${item.price} ج.م)</span>
-                    <span class="del-btn" onclick="removeFromCart(${idx})">حذف</span>
+                    <span>${item.name}</span>
+                    <div>
+                        <span style="margin-left:10px; font-weight:700;">${item.price} ج.م</span>
+                        <span class="del-btn" onclick="removeFromCart(${idx})">حذف</span>
+                    </div>
                 </div>
-            `).join('');
+            `}).join('');
+            document.getElementById('totalPrice').innerText = `الإجمالي: ${total} ج.م`;
         }
 
         function removeFromCart(idx) {
             cart.splice(idx, 1);
             updateCartUI();
-            if(cart.length === 0) toggleCart(false);
+            if(cart.length === 0) {
+                document.getElementById('cartCount').classList.remove('show');
+                toggleCart(false);
+            }
         }
 
         function toggleCart(show) {
@@ -217,15 +260,18 @@
             const name = document.getElementById('userName').value;
             const phone = document.getElementById('userPhone').value;
             const addr = document.getElementById('userAddress').value;
+            if(!name || !phone || !addr || cart.length === 0) return alert("اكمل البيانات والطلبات");
 
-            if(!name || !phone || !addr) return alert("برجاء إكمال البيانات");
-
-            let orderText = `طلب جديد من ليالي الشام\n\n`;
-            orderText += `الاسم: ${name}\nالهاتف: ${phone}\nالعنوان: ${addr}\n\nالطلبات:\n`;
-            cart.forEach(i => orderText += `- ${i.name} (${i.price} ج.م)\n`);
+            let orderText = `طلب جديد - ليالي الشام\n\n`;
+            orderText += `الاسم: ${name}\nالموبايل: ${phone}\nالعنوان: ${addr}\n\nالطلبات:\n`;
+            let total = 0;
+            cart.forEach(i => {
+                orderText += `- ${i.name} (${i.price} ج.م)\n`;
+                total += parseFloat(i.price);
+            });
+            orderText += `\nالإجمالي: ${total} ج.م`;
             
-            const wpUrl = `https://wa.me/201234567890?text=${encodeURIComponent(orderText)}`;
-            window.open(wpUrl, '_blank');
+            window.open(`https://wa.me/201234567890?text=${encodeURIComponent(orderText)}`, '_blank');
         }
 
         loadMenu();
