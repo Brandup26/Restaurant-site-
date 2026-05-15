@@ -7,15 +7,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #f4f4f9;
+            --bg: #eaeaea; /* تم جعل الخلفية أغمق قليلاً لراحة العين */
             --main-text: #1c1c1e;
-            --desc-text: #8e8e93;
+            --desc-text: #75757a;
             --accent: #d35400;
             --address-tag: #0a84ff;
-            --white: #ffffff;
-            --glass: rgba(255, 255, 255, 0.7);
+            --white: #f5f5f7; /* جعل أسطح الكروت أغمق بنسبة بسيطة متناسقة */
+            --glass: rgba(245, 245, 247, 0.75);
             --success: #34c759;
-            --header-bg: #ffffff;
+            --header-bg: #f5f5f7;
         }
 
         body.dark-mode {
@@ -162,11 +162,11 @@
         
         .cart-item-card {
             display: flex; align-items: center; gap: 12px; padding: 12px;
-            background: #f8f8fa; border-radius: 18px; margin-bottom: 10px;
+            background: rgba(0,0,0,0.04); border-radius: 18px; margin-bottom: 10px;
         }
         .cart-item-img { width: 50px; height: 50px; border-radius: 12px; object-fit: cover; }
         .cart-item-info { flex: 1; }
-        .cart-item-name { font-weight: 700; font-size: 0.9rem; color: #000; }
+        .cart-item-name { font-weight: 700; font-size: 0.9rem; color: var(--main-text); }
         .cart-item-price { color: var(--accent); font-weight: 800; font-size: 0.85rem; display: block; }
         .remove-btn { color: #ff3b30; font-weight: 800; font-size: 0.75rem; cursor: pointer; }
 
@@ -222,9 +222,9 @@
 
     <div class="modal" id="cartModal" onclick="if(event.target==this) toggleCart(false)">
         <div class="modal-content">
-            <h2 style="margin-bottom: 20px; color: #000;">طلباتك</h2>
+            <h2 style="margin-bottom: 20px;">طلباتك</h2>
             <div id="cartItemsList"></div>
-            <div style="margin: 20px 0; padding: 15px; background: #fff5ed; border-radius: 18px; display: flex; justify-content: space-between; color: #000;">
+            <div style="margin: 20px 0; padding: 15px; background: rgba(211, 84, 0, 0.1); border-radius: 18px; display: flex; justify-content: space-between;">
                 <b>المجموع</b>
                 <b id="totalAmount">0 ج.م</b>
             </div>
@@ -247,13 +247,11 @@
             document.getElementById('themeBtn').innerText = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
         }
 
-        // وظيفة التحميل المسبق للصور لضمان عدم وجود تأخير
         function preloadImages(data) {
             data.forEach(item => {
                 const img = new Image();
                 img.src = item.img;
             });
-            // أيضاً تحميل صور الأقسام
             const cats = [...new Set(data.map(i => i.category))];
             cats.forEach(c => {
                 const img = new Image();
@@ -271,9 +269,7 @@
                     return { category: col[0]?.trim(), name: col[1]?.trim(), price: col[2]?.trim(), desc: col[3]?.trim() || "", img: `${IMAGES_PATH}${col[1]?.trim()}.jpg` };
                 }).filter(i => i.name);
                 
-                // بدء التحميل المسبق فور استلام البيانات
                 preloadImages(menuData);
-                
                 renderNav();
                 setTimeout(() => document.getElementById('splash-screen').classList.add('splash-hidden'), 2500);
             } catch (e) { document.getElementById('splash-screen').classList.add('splash-hidden'); }
@@ -376,7 +372,8 @@
             const n = document.getElementById('uName').value, p = document.getElementById('uPhone').value, a = document.getElementById('uAddr').value;
             if(!n || !p || !a || cart.length === 0) return alert("يرجى إكمال البيانات واختيار الأصناف");
             let msg = `طلب جديد - مطعم أبو خضر\nالاسم: ${n}\nالموبايل: ${p}\nالعنوان: ${a}\n\nالطلبات:\n` + cart.map(i => `- ${i.name} (${i.price} ج.م)`).join('\n');
-            window.open(`https://wa.me/201034874663?text=${encodeURIComponent(msg)}`);
+            // تم تعديل رقم استقبال الطلبات للرقم الجديد المطلوب هنا
+            window.open(`https://wa.me/201000452121?text=${encodeURIComponent(msg)}`);
         }
 
         loadMenu();
