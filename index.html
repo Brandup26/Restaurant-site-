@@ -10,7 +10,8 @@
             --bg: #f2f2f7;
             --main-text: #1c1c1e;
             --desc-text: #8e8e93;
-            --accent: #d35400;
+            --accent: #d35400; /* لون البرجر البرتقالي */
+            --address-tag: #0a84ff; /* لون "العنوان" الأزرق المتناسق مع الآيفون */
             --white: #ffffff;
             --glass: rgba(255, 255, 255, 0.7);
             --success: #34c759;
@@ -28,50 +29,69 @@
         }
         .loader-content { text-align: center; }
         .loader-logo-big {
-            width: 140px; height: 140px; border-radius: 35px;
-            margin-bottom: 15px; animation: pulse 1.5s infinite ease-in-out;
-            object-fit: cover; box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 150px; height: 150px; border-radius: 40px;
+            margin-bottom: 20px; animation: pulse 1.5s infinite ease-in-out;
+            object-fit: cover; box-shadow: 0 15px 40px rgba(0,0,0,0.12);
         }
-        .loader-text { font-weight: 800; color: var(--accent); font-size: 1.8rem; margin-bottom: 5px; }
-        .loader-sub { font-size: 0.9rem; color: var(--desc-text); font-weight: 600; }
-        .loading-bar { width: 160px; height: 5px; background: #eee; margin: 25px auto; border-radius: 10px; overflow: hidden; }
+        .loader-text { font-weight: 800; color: var(--accent); font-size: 2rem; margin-bottom: 8px; }
+        .loader-slogan {
+            font-size: 1.1rem; color: #555; font-weight: 600;
+            opacity: 0; animation: fadeInSlogan 1.5s forwards 0.8s;
+            font-style: italic; /* لمسة ظريفة وانسيابية */
+        }
+        @keyframes fadeInSlogan { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .loading-bar { width: 180px; height: 6px; background: #eee; margin: 30px auto; border-radius: 10px; overflow: hidden; }
         .loading-bar span { display: block; width: 0; height: 100%; background: var(--accent); animation: progress 2.5s linear forwards; }
         
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
         @keyframes progress { from { width: 0; } to { width: 100%; } }
         .splash-hidden { transform: translateY(-100%); pointer-events: none; }
 
-        /* --- الهيدر الاحترافي --- */
+        /* --- الهيدر الفخم مع اللوجو الكبير في المنتصف --- */
         header { 
-            padding: 12px 20px; background: var(--white); 
-            display: flex; align-items: center; justify-content: space-between;
-            position: sticky; top: 0; z-index: 1000; box-shadow: 0 1px 10px rgba(0,0,0,0.05);
+            background: var(--white); 
+            position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+            display: flex; flex-direction: column; align-items: center;
+            padding: 15px 0;
         }
-        
-        .header-brand { display: flex; align-items: center; gap: 10px; flex: 1; order: 1; }
-        .header-logo { width: 45px; height: 45px; border-radius: 12px; object-fit: cover; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .brand-info { display: flex; flex-direction: column; }
-        .brand-name { font-weight: 800; font-size: 1.1rem; color: var(--accent); line-height: 1.2; }
-        .brand-addr { font-size: 0.65rem; color: var(--desc-text); font-weight: 600; }
 
+        .header-top { width: 100%; display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 10px; }
+        
+        .header-logo-container {
+            width: 80px; height: 80px; border-radius: 20px; background: white;
+            padding: 5px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden;
+        }
+        .header-logo { width: 100%; height: 100%; border-radius: 16px; object-fit: cover; }
+
+        .cart-trigger-container { position: absolute; left: 20px; } /* نقل السلة للشمال لتناسب الهيدر المركزي */
         .cart-trigger {
             width: 45px; height: 45px; background: var(--bg); border-radius: 14px;
             display: flex; align-items: center; justify-content: center; position: relative;
-            cursor: pointer; transition: 0.3s; order: 2;
+            cursor: pointer; transition: 0.3s;
         }
+        .cart-trigger:active { transform: scale(0.92); }
         .badge {
-            position: absolute; top: -5px; left: -5px; background: #ff3b30;
+            position: absolute; top: -5px; right: -5px; background: #ff3b30;
             color: white; font-size: 10px; font-weight: 800; width: 20px; height: 20px;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
             border: 2px solid white; transform: scale(0); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .badge.show { transform: scale(1); }
 
+        .header-bottom-addr { 
+            text-align: center; background: #fdfdfd; width: 100%; 
+            padding: 8px 15px; border-top: 0.5px solid rgba(0,0,0,0.05); 
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .addr-tag { color: var(--address-tag); font-weight: 800; font-size: 0.85rem; }
+        .brand-addr { font-size: 0.8rem; color: var(--main-text); font-weight: 600; }
+
         /* الأقسام والقائمة */
         .category-nav {
             display: flex; overflow-x: auto; white-space: nowrap; padding: 15px 10px; gap: 15px;
             scrollbar-width: none; background: var(--glass); backdrop-filter: blur(20px);
-            position: sticky; top: 69px; z-index: 999; border-bottom: 0.5px solid rgba(0,0,0,0.1);
+            position: sticky; top: 155px; z-index: 999; border-bottom: 0.5px solid rgba(0,0,0,0.1);
         }
         .category-nav::-webkit-scrollbar { display: none; }
         .cat-item { display: flex; flex-direction: column; align-items: center; min-width: 80px; }
@@ -101,10 +121,10 @@
         }
 
         .added-notice {
-            position: absolute; right: 45px; background: rgba(52, 199, 89, 0.15);
+            position: absolute; left: 45px; background: rgba(52, 199, 89, 0.15); /* تعديل لمكان التنبيه ليناسب مكان السلة الجديد */
             color: var(--success); font-size: 0.7rem; font-weight: 800;
             padding: 4px 10px; border-radius: 10px; opacity: 0;
-            transform: translateX(10px); transition: 0.4s ease; pointer-events: none;
+            transform: translateX(-10px); transition: 0.4s ease; pointer-events: none;
             white-space: nowrap;
         }
         .added-notice.show { opacity: 1; transform: translateX(0); }
@@ -163,22 +183,26 @@
         <div class="loader-content">
             <img src="./images/logooo.jpg" class="loader-logo-big" onerror="this.style.display='none'">
             <h2 class="loader-text">أبو خضر</h2>
-            <p class="loader-sub">بنزينة 6 وطنية العاصمة</p>
+            <p class="loader-slogan">طعم ياخدك في حته تانيه ✨</p>
             <div class="loading-bar"><span></span></div>
         </div>
     </div>
 
     <header>
-        <div class="header-brand">
-            <img src="./images/logooo.jpg" class="header-logo" onerror="this.style.display='none'">
-            <div class="brand-info">
-                <span class="brand-name">أبو خضر</span>
-                <span class="brand-addr">بنزينة 6 وطنية العاصمة</span>
+        <div class="header-top">
+            <div class="header-logo-container">
+                <img src="./images/logooo.jpg" class="header-logo" onerror="this.style.display='none'">
+            </div>
+            <div class="cart-trigger-container">
+                <div class="cart-trigger" onclick="toggleCart(true)" id="cartBtn">
+                    <span class="badge" id="cartBadge">0</span>
+                    <span style="font-size: 1.3rem;">🛒</span>
+                </div>
             </div>
         </div>
-        <div class="cart-trigger" onclick="toggleCart(true)" id="cartBtn">
-            <span class="badge" id="cartBadge">0</span>
-            <span style="font-size: 1.4rem;">🛒</span>
+        <div class="header-bottom-addr">
+            <span class="addr-tag">العنوان:</span>
+            <span class="brand-addr">بنزينة 6 وطنية العاصمة</span>
         </div>
     </header>
 
