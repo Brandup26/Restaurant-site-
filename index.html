@@ -16,38 +16,30 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg); color: var(--main-text); line-height: 1.6; }
+        body { background-color: var(--bg); color: var(--main-text); line-height: 1.6; overflow-x: hidden; }
 
-        /* الهيدر مع السلة فوق عالشمال */
         header { 
             padding: 15px 20px; background: var(--white); 
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex; align-items: center; justify-content: space-between;
             position: sticky; top: 0; z-index: 1000; box-shadow: 0 1px 0 rgba(0,0,0,0.05);
         }
-        header h1 { font-weight: 800; font-size: 1.3rem; color: var(--accent); flex: 1; text-align: center; margin-right: -40px; }
-
-        /* أيقونة السلة فوق على الشمال */
-        .cart-icon-wrapper {
+        
+        /* السلة فوق على الشمال */
+        .cart-trigger {
             width: 45px; height: 45px; background: var(--bg); border-radius: 14px;
             display: flex; align-items: center; justify-content: center; position: relative;
-            cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer; transition: 0.3s;
         }
-        .cart-icon-wrapper:active { transform: scale(0.9); }
-        .cart-count-badge {
+        .cart-trigger:active { transform: scale(0.9); }
+        .badge {
             position: absolute; top: -5px; right: -5px; background: #ff3b30;
-            color: white; font-size: 10px; font-weight: 800; width: 18px; height: 18px;
+            color: white; font-size: 10px; font-weight: 800; width: 20px; height: 20px;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            border: 2px solid var(--white); visibility: hidden;
+            border: 2px solid white; transform: scale(0); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .cart-count-badge.show { visibility: visible; animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .badge.show { transform: scale(1); }
 
-        /* أنميشن اهتزاز السلة */
-        @keyframes cartWobble {
-            0%, 100% { transform: rotate(0); }
-            25% { transform: rotate(-10deg); }
-            75% { transform: rotate(10deg); }
-        }
-        .wobble { animation: cartWobble 0.4s ease-in-out; }
+        header h1 { font-weight: 800; font-size: 1.3rem; color: var(--accent); flex: 1; text-align: center; margin-right: -45px; }
 
         /* الأقسام والقائمة */
         .category-nav {
@@ -61,14 +53,13 @@
         .cat-img-box img { width: 100%; height: 100%; object-fit: cover; }
         .cat-item.active .cat-img-box { border-color: var(--accent); transform: scale(1.05); }
         .cat-item span { font-size: 0.75rem; font-weight: 700; color: var(--desc-text); margin-top: 5px; }
-        .cat-item.active span { color: var(--accent); }
 
         .menu-list { padding: 15px; max-width: 600px; margin: auto; }
         .food-card {
-            background: var(--white); border-radius: 20px; margin-bottom: 12px; display: flex;
+            background: var(--white); border-radius: 22px; margin-bottom: 12px; display: flex;
             padding: 12px; gap: 12px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.03);
         }
-        .item-img-box { width: 85px; height: 85px; border-radius: 15px; overflow: hidden; background: #f2f2f7; flex-shrink: 0; }
+        .item-img-box { width: 85px; height: 85px; border-radius: 18px; overflow: hidden; background: #f2f2f7; flex-shrink: 0; }
         .item-img-box img { width: 100%; height: 100%; object-fit: cover; }
 
         .food-info { flex: 1; }
@@ -77,45 +68,70 @@
         .price-row { display: flex; justify-content: space-between; align-items: center; }
         .food-price { font-weight: 800; color: var(--accent); font-size: 0.95rem; }
 
-        /* زر الطلب مع أنميشن الـ Pop */
         .add-btn {
-            background: var(--accent); color: white; border: none; width: 34px; height: 34px;
-            border-radius: 50%; font-size: 1.3rem; font-weight: bold; cursor: pointer;
-            transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex; align-items: center; justify-content: center;
-        }
-        .add-btn:active { transform: scale(0.8); }
-
-        @keyframes pop {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+            background: var(--accent); color: white; border: none; width: 36px; height: 36px;
+            border-radius: 50%; font-size: 1.4rem; font-weight: bold; cursor: pointer;
+            transition: 0.2s; display: flex; align-items: center; justify-content: center;
         }
 
-        /* نافذة السلة (Bottom Sheet) */
-        .cart-modal {
+        /* أنميشن الطيران */
+        .fly-item {
+            position: fixed; z-index: 9999; pointer-events: none;
+            width: 30px; height: 30px; background: var(--accent);
+            color: white; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; font-size: 15px;
+            transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        /* تنبيه تمت الإضافة */
+        .toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: #1c1c1e; color: white; padding: 12px 25px; border-radius: 25px;
+            font-size: 0.9rem; font-weight: 600; z-index: 5000; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        /* نافذة السلة الاحترافية */
+        .modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.4); z-index: 2000; display: none;
             justify-content: center; align-items: flex-end;
         }
-        .cart-content {
+        .modal-content {
             background: var(--white); width: 100%; max-width: 500px; padding: 25px;
-            border-radius: 30px 30px 0 0; max-height: 85vh; overflow-y: auto;
+            border-radius: 30px 30px 0 0; max-height: 90vh; overflow-y: auto;
             animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-        .cart-header { display: flex; justify-content: space-between; margin-bottom: 20px; }
-        .cart-item-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 0.5px solid #f2f2f7; }
-        .del-btn { color: #ff3b30; font-weight: 700; font-size: 0.85rem; }
-
-        .user-data { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
-        .user-data input {
-            background: #f2f2f7; border: none; padding: 16px; border-radius: 14px;
-            font-size: 0.9rem; outline: none; text-align: right;
+        .cart-item-card {
+            display: flex; align-items: center; gap: 12px; padding: 12px;
+            background: #f8f8fa; border-radius: 18px; margin-bottom: 10px;
         }
-        .order-btn {
+        .cart-item-img { width: 50px; height: 50px; border-radius: 12px; object-fit: cover; }
+        .cart-item-info { flex: 1; }
+        .cart-item-name { font-weight: 700; font-size: 0.9rem; display: block; }
+        .cart-item-price { color: var(--accent); font-weight: 800; font-size: 0.85rem; }
+        .remove-btn { color: #ff3b30; font-weight: 800; font-size: 0.75rem; cursor: pointer; padding: 5px; }
+
+        .total-section {
+            margin: 20px 0; padding: 15px; background: #fff5ed; border-radius: 18px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .total-label { font-weight: 700; color: #444; }
+        .total-amount { font-weight: 800; font-size: 1.3rem; color: var(--accent); }
+
+        .user-fields { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        .user-fields input {
+            background: #f2f2f7; border: none; padding: 16px; border-radius: 14px;
+            font-size: 0.9rem; outline: none; text-align: right; border: 1px solid transparent;
+        }
+        .user-fields input:focus { border-color: var(--accent); background: white; }
+
+        .submit-btn {
             background: #34c759; color: white; border: none; padding: 18px;
-            border-radius: 16px; font-weight: 800; font-size: 1.1rem; margin-top: 20px; cursor: pointer; width: 100%;
+            border-radius: 18px; font-weight: 800; font-size: 1.1rem; width: 100%; cursor: pointer;
         }
 
         #loader { text-align: center; padding: 50px; color: #ccc; }
@@ -124,33 +140,39 @@
 <body>
 
     <header>
-        <div class="cart-icon-wrapper" onclick="toggleCart(true)" id="cartIcon">
-            <span class="cart-count-badge" id="cartCount">0</span>
+        <div class="cart-trigger" onclick="toggleCart(true)" id="cartBtn">
+            <span class="badge" id="cartBadge">0</span>
             <span style="font-size: 1.4rem;">🛒</span>
         </div>
         <h1>ليالي الشام</h1>
     </header>
 
     <div class="category-nav" id="catNav"></div>
+    <div class="menu-list" id="menuList"><div id="loader">يرجى الانتظار...</div></div>
 
-    <div class="menu-list" id="menuList">
-        <div id="loader">يرجى الانتظار...</div>
-    </div>
+    <div class="toast" id="toast">تمت الإضافة للسلة بنجاح ✨</div>
 
-    <div class="cart-modal" id="cartModal" onclick="if(event.target==this) toggleCart(false)">
-        <div class="cart-content">
-            <div class="cart-header">
-                <h3 style="font-weight: 800;">طلباتك</h3>
-                <span onclick="toggleCart(false)" style="color: var(--accent); font-weight: 700; cursor:pointer;">إغلاق</span>
+    <div class="modal" id="cartModal" onclick="if(event.target==this) toggleCart(false)">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="font-weight: 800;">سلة طلباتك</h2>
+                <span onclick="toggleCart(false)" style="color: var(--accent); font-weight: 800; cursor:pointer;">إغلاق</span>
             </div>
+            
             <div id="cartItemsList"></div>
-            <div id="totalPrice" style="text-align: left; padding: 15px 0; font-weight: 800; color: var(--accent);"></div>
-            <div class="user-data">
-                <input type="text" id="userName" placeholder="الاسم بالكامل">
-                <input type="tel" id="userPhone" placeholder="رقم الموبايل">
-                <input type="text" id="userAddress" placeholder="العنوان بالتفصيل">
+
+            <div class="total-section">
+                <span class="total-label">المجموع الإجمالي</span>
+                <span class="total-amount" id="totalAmount">0 ج.م</span>
             </div>
-            <button class="order-btn" onclick="sendOrder()">إتمام الطلب</button>
+
+            <div class="user-fields">
+                <input type="text" id="uName" placeholder="الاسم بالكامل">
+                <input type="tel" id="uPhone" placeholder="رقم الموبايل">
+                <input type="text" id="uAddr" placeholder="العنوان بالتفصيل">
+            </div>
+            
+            <button class="submit-btn" onclick="sendToWA()">إرسال الطلب الآن</button>
         </div>
     </div>
 
@@ -172,106 +194,123 @@
                         name: col[1]?.trim(),
                         price: col[2]?.trim(),
                         desc: col[3]?.trim() || "",
-                        catImg: `${IMAGES_PATH}${col[0]?.trim()}.jpg`, 
-                        itemImg: `${IMAGES_PATH}${col[1]?.trim()}.jpg`
+                        img: `${IMAGES_PATH}${col[1]?.trim()}.jpg`,
+                        catImg: `${IMAGES_PATH}${col[0]?.trim()}.jpg`
                     };
                 }).filter(i => i.name);
-                renderNav();
-                showCategory(menuData[0].category);
+                renderUI();
             } catch (e) { document.getElementById('loader').innerText = "خطأ في الاتصال"; }
         }
 
-        function renderNav() {
+        function renderUI() {
             const uniqueCats = [...new Map(menuData.map(item => [item.category, item])).values()];
             document.getElementById('catNav').innerHTML = uniqueCats.map((cat, idx) => `
-                <div class="cat-item ${idx === 0 ? 'active' : ''}" onclick="showCategory('${cat.category}', this)">
+                <div class="cat-item ${idx === 0 ? 'active' : ''}" onclick="filterCat('${cat.category}', this)">
                     <div class="cat-img-box"><img src="${cat.catImg}" onerror="this.src='${IMAGES_PATH}default.jpg'"></div>
                     <span>${cat.category}</span>
                 </div>
             `).join('');
+            filterCat(menuData[0].category);
         }
 
-        function showCategory(catName, el) {
+        function filterCat(cat, el) {
             if(el) {
-                document.querySelectorAll('.cat-item').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.cat-item').forEach(b => b.classList.remove('active'));
                 el.classList.add('active');
             }
-            const items = menuData.filter(i => i.category === catName);
+            const items = menuData.filter(i => i.category === cat);
             document.getElementById('menuList').innerHTML = items.map(item => `
                 <div class="food-card">
-                    <div class="item-img-box"><img src="${item.itemImg}" onerror="this.src='${IMAGES_PATH}default.jpg'"></div>
+                    <div class="item-img-box"><img src="${item.img}" onerror="this.src='${IMAGES_PATH}default.jpg'"></div>
                     <div class="food-info">
                         <span class="food-name">${item.name}</span>
                         <span class="food-desc">${item.desc}</span>
                         <div class="price-row">
                             <span class="food-price">${item.price} ج.م</span>
-                            <button class="add-btn" onclick="addToCart('${item.name}', ${item.price})">+</button>
+                            <button class="add-btn" onclick="addToCart(event, '${item.name}', ${item.price}, '${item.img}')">+</button>
                         </div>
                     </div>
                 </div>
             `).join('');
         }
 
-        function addToCart(name, price) {
-            cart.push({name, price});
-            animateCart();
-            updateCartUI();
+        function addToCart(e, name, price, img) {
+            cart.push({name, price, img});
+            
+            // أنميشن الطيران
+            const fly = document.createElement('div');
+            fly.className = 'fly-item';
+            fly.innerHTML = '🍔';
+            fly.style.left = e.clientX + 'px';
+            fly.style.top = e.clientY + 'px';
+            document.body.appendChild(fly);
+
+            const cartPos = document.getElementById('cartBtn').getBoundingClientRect();
+            
+            setTimeout(() => {
+                fly.style.left = (cartPos.left + 20) + 'px';
+                fly.style.top = (cartPos.top + 20) + 'px';
+                fly.style.transform = 'scale(0.2)';
+                fly.style.opacity = '0';
+            }, 10);
+
+            setTimeout(() => {
+                fly.remove();
+                updateCart();
+                showToast();
+            }, 700);
         }
 
-        function animateCart() {
-            const icon = document.getElementById('cartIcon');
-            const badge = document.getElementById('cartCount');
-            icon.classList.add('wobble');
+        function showToast() {
+            const t = document.getElementById('toast');
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        function updateCart() {
+            const badge = document.getElementById('cartBadge');
+            badge.innerText = cart.length;
             badge.classList.add('show');
-            setTimeout(() => icon.classList.remove('wobble'), 400);
-        }
 
-        function updateCartUI() {
-            document.getElementById('cartCount').innerText = cart.length;
             let total = 0;
             document.getElementById('cartItemsList').innerHTML = cart.map((item, idx) => {
                 total += parseFloat(item.price);
                 return `
-                <div class="cart-item-row">
-                    <span>${item.name}</span>
-                    <div>
-                        <span style="margin-left:10px; font-weight:700;">${item.price} ج.م</span>
-                        <span class="del-btn" onclick="removeFromCart(${idx})">حذف</span>
+                <div class="cart-item-card">
+                    <img src="${item.img}" class="cart-item-img" onerror="this.src='${IMAGES_PATH}default.jpg'">
+                    <div class="cart-item-info">
+                        <span class="cart-item-name">${item.name}</span>
+                        <span class="cart-item-price">${item.price} ج.م</span>
                     </div>
+                    <span class="remove-btn" onclick="removeFromCart(${idx})">حذف</span>
                 </div>
             `}).join('');
-            document.getElementById('totalPrice').innerText = `الإجمالي: ${total} ج.م`;
+            document.getElementById('totalAmount').innerText = `${total} ج.م`;
         }
 
         function removeFromCart(idx) {
             cart.splice(idx, 1);
-            updateCartUI();
+            updateCart();
             if(cart.length === 0) {
-                document.getElementById('cartCount').classList.remove('show');
+                document.getElementById('cartBadge').classList.remove('show');
                 toggleCart(false);
             }
         }
 
-        function toggleCart(show) {
-            document.getElementById('cartModal').style.display = show ? 'flex' : 'none';
-        }
+        function toggleCart(s) { document.getElementById('cartModal').style.display = s ? 'flex' : 'none'; }
 
-        function sendOrder() {
-            const name = document.getElementById('userName').value;
-            const phone = document.getElementById('userPhone').value;
-            const addr = document.getElementById('userAddress').value;
-            if(!name || !phone || !addr || cart.length === 0) return alert("اكمل البيانات والطلبات");
+        function sendToWA() {
+            const n = document.getElementById('uName').value;
+            const p = document.getElementById('uPhone').value;
+            const a = document.getElementById('uAddr').value;
+            if(!n || !p || !a || cart.length === 0) return alert("برجاء إكمال البيانات والطلبات");
 
-            let orderText = `طلب جديد - ليالي الشام\n\n`;
-            orderText += `الاسم: ${name}\nالموبايل: ${phone}\nالعنوان: ${addr}\n\nالطلبات:\n`;
+            let msg = `طلب جديد - ليالي الشام\n\nالاسم: ${n}\nالموبايل: ${p}\nالعنوان: ${a}\n\nالطلبات:\n`;
             let total = 0;
-            cart.forEach(i => {
-                orderText += `- ${i.name} (${i.price} ج.م)\n`;
-                total += parseFloat(i.price);
-            });
-            orderText += `\nالإجمالي: ${total} ج.م`;
+            cart.forEach(i => { msg += `- ${i.name} (${i.price} ج.م)\n`; total += parseFloat(i.price); });
+            msg += `\nالإجمالي: ${total} ج.م`;
             
-            window.open(`https://wa.me/201234567890?text=${encodeURIComponent(orderText)}`, '_blank');
+            window.open(`https://wa.me/201234567890?text=${encodeURIComponent(msg)}`);
         }
 
         loadMenu();
