@@ -292,7 +292,6 @@
                 renderNav();
                 setTimeout(() => {
                     document.getElementById('splash-screen').classList.add('splash-hidden');
-                    // تسجيل الـ Service Worker يتم بأمان تام هنا بعد انتهاء فتح الأبلكيشن تماماً
                     if ('serviceWorker' in navigator) {
                         navigator.serviceWorker.register('sw.js').catch(err => console.log('SW failed:', err));
                     }
@@ -410,7 +409,7 @@
                       + cart.map(i => `- ${i.name} (${i.price} ج.م)`).join('\n')
                       + `\n\n💰 الإجمالي: ${currentTotal} ج.م`;
                       
-            window.open(`https://wa.me/201000452121?text=${encodeURIComponent(msg)}`);
+            window.open(`https://wa.me/201290013255?text=${encodeURIComponent(msg)}`);
         }
 
         loadMenu();
