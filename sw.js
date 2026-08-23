@@ -1,4 +1,4 @@
-const CACHE_NAME = 'abukhader-cache-v3';
+const CACHE_NAME = 'abukhader-cache-v4';
 const assets = [
   '/',
   '/index.html',
