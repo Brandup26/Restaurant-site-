@@ -263,16 +263,21 @@
 
         // تسجيل وإجبار التحديث التلقائي للـ Service Worker لكسر الكاش القديم عند الزبائن
         if ('serviceWorker' in navigator) {
+            let refreshing = false;
+
+            // عند استبدال الـ Service Worker القديم، قم بعمل Reload أوتوماتيك لمرة واحدة
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (!refreshing) {
+                    refreshing = true;
+                    window.location.reload();
+                }
+            });
+
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js?v=2.0').then(reg => {
-                    reg.onupdatefound = () => {
-                        const installingWorker = reg.installing;
-                        installingWorker.onstatechange = () => {
-                            if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                window.location.reload();
-                            }
-                        };
-                    };
+                // إضافة timestamp لمنع المتصفح من تخزين ملف sw.js نفسه
+                navigator.serviceWorker.register('sw.js?v=2.1&t=' + new Date().getTime()).then(reg => {
+                    // فحص فورى للتعديلات في كل فتحة للأبلكيشن
+                    reg.update();
                 });
             });
         }
