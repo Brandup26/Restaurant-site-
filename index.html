@@ -43,7 +43,7 @@
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--white); z-index: 9999;
             display: flex; justify-content: center; align-items: center;
-            transition: 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+            transition: 0.6s cubic-bezier(0.65, 0, 0.35, 1);
         }
         .loader-content { text-align: center; }
         .loader-logo-big {
@@ -60,7 +60,7 @@
         .loading-percent { font-size: 0.85rem; font-weight: 800; color: var(--accent); margin-top: 8px; display: block; }
 
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
-        .splash-hidden { transform: translateY(-100%); pointer-events: none; }
+        .splash-hidden { transform: translateY(-100%); pointer-events: none; opacity: 0; }
 
         /* --- الهيدر --- */
         header { 
@@ -355,12 +355,19 @@
             }
         }
 
-        // أنيميشن شاشة الترحيب ونسبة التحميل المتزامنة
-        function startSplashProgress() {
+        // إلغاء أي إعادة تحميل تلقائية مزعجة من الـ Service Worker لضمان الدخول الفوري
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(() => {});
+            });
+        }
+
+        // بدء شاشة الترحيب والتحميل المتزامن
+        function initApp() {
             let percent = 0;
             const span = document.getElementById('loadingSpan');
             const percentText = document.getElementById('loadingPercent');
-            const duration = 2200; // 2.2 ثانية
+            const duration = 1800; // 1.8 ثانية سريعة وناعمة
             const intervalTime = 20;
             const step = 100 / (duration / intervalTime);
 
@@ -369,35 +376,13 @@
                 if (percent >= 100) {
                     percent = 100;
                     clearInterval(timer);
-                    setTimeout(() => {
-                        document.getElementById('splash-screen').classList.add('splash-hidden');
-                    }, 300);
+                    document.getElementById('splash-screen').classList.add('splash-hidden');
                 }
                 span.style.width = percent + '%';
                 percentText.innerText = Math.floor(percent) + '%';
             }, intervalTime);
-        }
 
-        // Service Worker
-        if ('serviceWorker' in navigator) {
-            let refreshing = false;
-            navigator.serviceWorker.addEventListener('controllerchange', () => {
-                if (!refreshing) {
-                    refreshing = true;
-                    window.location.reload();
-                }
-            });
-
-            window.addEventListener('load', () => {
-                startSplashProgress();
-                navigator.serviceWorker.register('sw.js?v=2.3&t=' + new Date().getTime()).then(reg => {
-                    reg.update();
-                });
-            });
-        } else {
-            window.addEventListener('load', () => {
-                startSplashProgress();
-            });
+            loadMenu();
         }
 
         function toggleTheme() {
@@ -461,7 +446,6 @@
             if(el) { document.querySelectorAll('.cat-item').forEach(b => b.classList.remove('active')); el.classList.add('active'); }
             
             document.getElementById('menuList').innerHTML = menuData.filter(i => i.category === cat).map((item) => {
-                // عرض السعر الأساسي العادي فقط في الكارت الرئيسي (إخفاء أسعار الأحجام تماماً من الكروت)
                 let priceDisplay = item.price ? `${item.price} ج.م` : "";
 
                 return `
@@ -485,7 +469,6 @@
             const item = menuData.find(i => i.name === itemName);
             if(!item) return;
 
-            // إذا كان الصنف يمتلك أحجام Single أو Double يظهر المودال الخاص بها
             if(item.single || item.double) {
                 pendingItemData = { event: e, btn: btn, item: item };
                 openSizeModal(item);
@@ -622,7 +605,8 @@
             window.open(`https://wa.me/201290013255?text=${encodeURIComponent(msg)}`);
         }
 
-        loadMenu();
+        // تشغيل التطبيق فريش ومن أول مرة بدون أي تكرار
+        window.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
 </html>
