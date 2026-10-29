@@ -53,10 +53,13 @@
         }
         .loader-text { font-weight: 800; color: var(--accent); font-size: 2rem; margin-bottom: 8px; }
         .loader-slogan { font-size: 1.1rem; color: var(--desc-text); font-weight: 600; font-style: italic; }
-        .loading-bar { width: 180px; height: 6px; background: #eee; margin: 30px auto; border-radius: 10px; overflow: hidden; }
-        .loading-bar span { display: block; width: 0; height: 100%; background: var(--accent); animation: progress 2.5s linear forwards; }
+        
+        .loading-container { width: 180px; margin: 30px auto 0 auto; text-align: center; }
+        .loading-bar { width: 100%; height: 6px; background: #eee; border-radius: 10px; overflow: hidden; }
+        .loading-bar span { display: block; width: 0; height: 100%; background: var(--accent); }
+        .loading-percent { font-size: 0.85rem; font-weight: 800; color: var(--accent); margin-top: 8px; display: block; }
+
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
-        @keyframes progress { from { width: 0; } to { width: 100%; } }
         .splash-hidden { transform: translateY(-100%); pointer-events: none; }
 
         /* --- الهيدر --- */
@@ -89,10 +92,9 @@
             width: 45px; height: 45px; background: var(--bg); border-radius: 14px;
             display: flex; align-items: center; justify-content: center; position: relative;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
         }
-        .cart-trigger.shake {
-            animation: cartShake 0.5s ease-in-out;
-        }
+        .cart-trigger.shake { animation: cartShake 0.5s ease-in-out; }
         @keyframes cartShake {
             0%, 100% { transform: scale(1) rotate(0deg); }
             20%, 60% { transform: scale(1.15) rotate(-10deg); }
@@ -115,13 +117,35 @@
         .addr-tag { color: var(--address-tag); font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; gap: 4px; }
         .brand-addr { font-size: 0.8rem; color: var(--main-text); font-weight: 600; }
 
+        /* --- زر تثبيت التطبيق الشيك (PWA Install Banner) --- */
+        .install-banner {
+            max-width: 600px; margin: 15px auto 0 auto; padding: 0 15px;
+            display: none; animation: fadeInDown 0.5s ease;
+        }
+        .install-btn-box {
+            background: linear-gradient(135deg, var(--accent), #e67e22);
+            color: white; padding: 12px 20px; border-radius: 18px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 8px 20px rgba(211, 84, 0, 0.3); cursor: pointer;
+            font-weight: 700;
+        }
+        .install-btn-box span { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; }
+        .install-action-badge {
+            background: rgba(255,255,255,0.25); padding: 6px 14px; border-radius: 12px;
+            font-size: 0.85rem; font-weight: 800; backdrop-filter: blur(5px);
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* القائمة */
         .category-nav {
             display: flex; overflow-x: auto; white-space: nowrap; padding: 15px 10px; gap: 15px;
             scrollbar-width: none; background: var(--glass); backdrop-filter: blur(20px);
             position: sticky; top: 190px; z-index: 999; border-bottom: 0.5px solid rgba(0,0,0,0.1);
         }
-        .cat-item { display: flex; flex-direction: column; align-items: center; min-width: 80px; }
+        .cat-item { display: flex; flex-direction: column; align-items: center; min-width: 80px; cursor: pointer; }
         .cat-img-box { width: 55px; height: 55px; border-radius: 16px; background: #e5e5ea; overflow: hidden; border: 2.5px solid transparent; transition: 0.3s; }
         .cat-img-box img { width: 100%; height: 100%; object-fit: cover; }
         .cat-item.active .cat-img-box { border-color: var(--accent); transform: scale(1.05); }
@@ -143,6 +167,7 @@
         .add-btn { 
             background: var(--accent); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; 
             font-size: 1.4rem; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold;
+            box-shadow: 0 4px 10px rgba(211, 84, 0, 0.3);
         }
         
         .added-notice {
@@ -174,10 +199,15 @@
         .dev-credit { font-size: 0.85rem; color: var(--desc-text); font-weight: 700; }
         .dev-credit a { color: var(--address-tag); text-decoration: none; display: block; margin-top: 3px; }
 
-        /* مودال السلة */
+        /* مودال السلة والاختيارات */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; display: none; justify-content: center; align-items: flex-end; }
-        .modal-content { background: var(--white); width: 100%; max-width: 500px; padding: 25px; border-radius: 30px 30px 0 0; max-height: 90vh; overflow-y: auto; color: var(--main-text); }
+        .modal-content { background: var(--white); width: 100%; max-width: 500px; padding: 25px; border-radius: 30px 30px 0 0; max-height: 90vh; overflow-y: auto; color: var(--main-text); animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
         .cart-item-card {
             display: flex; align-items: center; gap: 12px; padding: 12px;
             background: rgba(0,0,0,0.04); border-radius: 18px; margin-bottom: 10px;
@@ -189,7 +219,26 @@
         .remove-btn { color: #ff3b30; font-weight: 800; font-size: 0.75rem; cursor: pointer; }
 
         .user-fields input { background: var(--bg); border: none; padding: 16px; border-radius: 14px; width: 100%; margin-bottom: 10px; color: var(--main-text); text-align: right; }
-        .submit-btn { background: #34c759; color: white; border: none; padding: 18px; border-radius: 18px; width: 100%; font-weight: 800; cursor: pointer; }
+        .submit-btn { background: #34c759; color: white; border: none; padding: 18px; border-radius: 18px; width: 100%; font-weight: 800; cursor: pointer; font-size: 1.05rem; }
+
+        /* مودال اختيار الحجم Single / Double */
+        .size-picker-content { text-align: center; }
+        .size-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 5px; }
+        .size-sub { font-size: 0.85rem; color: var(--desc-text); margin-bottom: 20px; }
+        .size-options { display: flex; gap: 12px; justify-content: center; margin-bottom: 15px; }
+        .size-card {
+            flex: 1; background: var(--bg); border: 2px solid transparent;
+            border-radius: 20px; padding: 15px 10px; cursor: pointer;
+            transition: all 0.25s ease; text-align: center;
+        }
+        .size-card:active { transform: scale(0.95); }
+        .size-card:hover { border-color: var(--accent); }
+        .size-name { font-weight: 800; font-size: 1.05rem; color: var(--main-text); display: block; margin-bottom: 4px; }
+        .size-price { font-weight: 800; color: var(--accent); font-size: 0.95rem; display: block; }
+        .close-size-btn {
+            background: rgba(0,0,0,0.06); border: none; padding: 12px; width: 100%;
+            border-radius: 14px; font-weight: 700; color: var(--desc-text); cursor: pointer; margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -199,7 +248,10 @@
             <img src="./images/logooo.jpg" class="loader-logo-big">
             <h2 class="loader-text">أبو خضر</h2>
             <p class="loader-slogan">طعم ياخدك في حته تانيه ✨</p>
-            <div class="loading-bar"><span></span></div>
+            <div class="loading-container">
+                <div class="loading-bar"><span id="loadingSpan"></span></div>
+                <span class="loading-percent" id="loadingPercent">0%</span>
+            </div>
         </div>
     </div>
 
@@ -222,6 +274,14 @@
         </div>
     </header>
 
+    <!-- زر تثبيت التطبيق (PWA Install Banner) -->
+    <div class="install-banner" id="installBanner">
+        <div class="install-btn-box" onclick="installApp()">
+            <span>✨ ثبت تطبيق أبو خضر الآن على هاتفك</span>
+            <div class="install-action-badge">تثبيت 📲</div>
+        </div>
+    </div>
+
     <div class="category-nav" id="catNav"></div>
     <div id="menuList" class="menu-list"></div>
 
@@ -238,9 +298,10 @@
         </div>
     </footer>
 
+    <!-- مودال السلة -->
     <div class="modal" id="cartModal" onclick="if(event.target==this) toggleCart(false)">
         <div class="modal-content">
-            <h2 style="margin-bottom: 20px;">طلباتك</h2>
+            <h2 style="margin-bottom: 20px;">طلباتك 🛒</h2>
             <div id="cartItemsList"></div>
             <div style="margin: 20px 0; padding: 15px; background: rgba(211, 84, 0, 0.1); border-radius: 18px; display: flex; justify-content: space-between;">
                 <b>المجموع</b>
@@ -251,7 +312,17 @@
                 <input type="tel" id="uPhone" placeholder="رقم الموبايل">
                 <input type="text" id="uAddr" placeholder="العنوان بالتفصيل">
             </div>
-            <button class="submit-btn" onclick="sendToWA()">تأكيد الطلب</button>
+            <button class="submit-btn" onclick="sendToWA()">تأكيد الطلب عبر الواتساب</button>
+        </div>
+    </div>
+
+    <!-- مودال اختيار الحجم (Single / Double) -->
+    <div class="modal" id="sizeModal" onclick="if(event.target==this) closeSizeModal()">
+        <div class="modal-content size-picker-content">
+            <h3 class="size-title" id="sizeModalTitle">اختر الحجم</h3>
+            <p class="size-sub">حدد الحجم المناسب للوجبة</p>
+            <div class="size-options" id="sizeOptionsContainer"></div>
+            <button class="close-size-btn" onclick="closeSizeModal()">إلغاء</button>
         </div>
     </div>
 
@@ -260,12 +331,56 @@
         const IMAGES_PATH = "./images/"; 
         let menuData = [], cart = [];
         let currentTotal = 0; 
+        let pendingItemData = null;
+        let deferredPrompt = null;
 
-        // تسجيل وإجبار التحديث التلقائي للـ Service Worker لكسر الكاش القديم عند الزبائن
+        // إدارة PWA Install Prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installBanner').style.display = 'block';
+        });
+
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        document.getElementById('installBanner').style.display = 'none';
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                alert("التطبيق مثبت بالفعل أو أن متصفحك لا يدعم التثبيت المباشر، يمكنك تثبيته يدوياً من قائمة المتصفح (إضافة إلى الشاشة الرئيسية).");
+            }
+        }
+
+        // أنيميشن شاشة الترحيب ونسبة التحميل المتزامنة
+        function startSplashProgress() {
+            let percent = 0;
+            const span = document.getElementById('loadingSpan');
+            const percentText = document.getElementById('loadingPercent');
+            const duration = 2200; // 2.2 ثانية
+            const intervalTime = 20;
+            const step = 100 / (duration / intervalTime);
+
+            const timer = setInterval(() => {
+                percent += step;
+                if (percent >= 100) {
+                    percent = 100;
+                    clearInterval(timer);
+                    setTimeout(() => {
+                        document.getElementById('splash-screen').classList.add('splash-hidden');
+                    }, 300);
+                }
+                span.style.width = percent + '%';
+                percentText.innerText = Math.floor(percent) + '%';
+            }, intervalTime);
+        }
+
+        // Service Worker
         if ('serviceWorker' in navigator) {
             let refreshing = false;
-
-            // عند استبدال الـ Service Worker القديم، قم بعمل Reload أوتوماتيك لمرة واحدة
             navigator.serviceWorker.addEventListener('controllerchange', () => {
                 if (!refreshing) {
                     refreshing = true;
@@ -274,11 +389,14 @@
             });
 
             window.addEventListener('load', () => {
-                // إضافة timestamp لمنع المتصفح من تخزين ملف sw.js نفسه
-                navigator.serviceWorker.register('sw.js?v=2.1&t=' + new Date().getTime()).then(reg => {
-                    // فحص فورى للتعديلات في كل فتحة للأبلكيشن
+                startSplashProgress();
+                navigator.serviceWorker.register('sw.js?v=2.3&t=' + new Date().getTime()).then(reg => {
                     reg.update();
                 });
+            });
+        } else {
+            window.addEventListener('load', () => {
+                startSplashProgress();
             });
         }
 
@@ -304,18 +422,27 @@
                 const response = await fetch(csvUrl + '&nocache=' + new Date().getTime());
                 const data = await response.text();
                 const rows = data.split('\n').slice(1);
+                
                 menuData = rows.map(row => {
                     const col = row.split(',');
-                    return { category: col[0]?.trim(), name: col[1]?.trim(), price: col[2]?.trim(), desc: col[3]?.trim() || "", img: `${IMAGES_PATH}${col[1]?.trim()}.jpg` };
+                    const singleVal = col[4]?.trim();
+                    const doubleVal = col[5]?.trim();
+
+                    return { 
+                        category: col[0]?.trim(), 
+                        name: col[1]?.trim(), 
+                        price: col[2]?.trim(), 
+                        desc: col[3]?.trim() || "", 
+                        single: (singleVal && singleVal !== "" && !isNaN(singleVal)) ? singleVal : null,
+                        double: (doubleVal && doubleVal !== "" && !isNaN(doubleVal)) ? doubleVal : null,
+                        img: `${IMAGES_PATH}${col[1]?.trim()}.jpg` 
+                    };
                 }).filter(i => i.name);
                 
                 preloadImages(menuData);
                 renderNav();
-                setTimeout(() => {
-                    document.getElementById('splash-screen').classList.add('splash-hidden');
-                }, 2500);
             } catch (e) { 
-                document.getElementById('splash-screen').classList.add('splash-hidden'); 
+                console.error(e);
             }
         }
 
@@ -327,32 +454,95 @@
                     <span>${cat.category}</span>
                 </div>
             `).join('');
-            filterCat(menuData[0].category);
+            if(menuData.length > 0) filterCat(menuData[0].category);
         }
 
         function filterCat(cat, el) {
             if(el) { document.querySelectorAll('.cat-item').forEach(b => b.classList.remove('active')); el.classList.add('active'); }
-            document.getElementById('menuList').innerHTML = menuData.filter(i => i.category === cat).map(item => `
+            
+            document.getElementById('menuList').innerHTML = menuData.filter(i => i.category === cat).map((item) => {
+                // عرض السعر الأساسي العادي فقط في الكارت الرئيسي (إخفاء أسعار الأحجام تماماً من الكروت)
+                let priceDisplay = item.price ? `${item.price} ج.م` : "";
+
+                return `
                 <div class="food-card">
                     <div class="item-img-box"><img src="${item.img}" onerror="this.src='${IMAGES_PATH}default.jpg'"></div>
                     <div class="food-info">
                         <span class="food-name">${item.name}</span>
                         <p class="food-desc">${item.desc}</p>
                         <div class="price-row">
-                            <span class="food-price">${item.price} ج.م</span>
+                            <span class="food-price">${priceDisplay}</span>
                             <span class="added-notice">تم الطلب ✅</span>
-                            <button class="add-btn" onclick="addToCart(event, this, '${item.name}', ${item.price}, '${item.img}')">+</button>
+                            <button class="add-btn" onclick="handleAddClick(event, this, '${item.name}')">+</button>
                         </div>
                     </div>
                 </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
-        function addToCart(e, btn, name, price, img) {
+        function handleAddClick(e, btn, itemName) {
+            const item = menuData.find(i => i.name === itemName);
+            if(!item) return;
+
+            // إذا كان الصنف يمتلك أحجام Single أو Double يظهر المودال الخاص بها
+            if(item.single || item.double) {
+                pendingItemData = { event: e, btn: btn, item: item };
+                openSizeModal(item);
+            } else {
+                executeAddToCart(e, btn, item.name, item.price, item.img);
+            }
+        }
+
+        function openSizeModal(item) {
+            document.getElementById('sizeModalTitle').innerText = item.name;
+            let optionsHTML = "";
+            
+            if(item.single) {
+                optionsHTML += `
+                    <div class="size-card" onclick="selectSizeOption('Single', ${item.single})">
+                        <span class="size-name">Single 🍔</span>
+                        <span class="size-price">${item.single} ج.م</span>
+                    </div>
+                `;
+            }
+            if(item.double) {
+                optionsHTML += `
+                    <div class="size-card" onclick="selectSizeOption('Double', ${item.double})">
+                        <span class="size-name">Double 🍔🍔</span>
+                        <span class="size-price">${item.double} ج.م</span>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('sizeOptionsContainer').innerHTML = optionsHTML;
+            document.getElementById('sizeModal').style.display = 'flex';
+        }
+
+        function closeSizeModal() {
+            document.getElementById('sizeModal').style.display = 'none';
+            pendingItemData = null;
+        }
+
+        function selectSizeOption(sizeLabel, price) {
+            if(pendingItemData) {
+                const { event, btn, item } = pendingItemData;
+                const fullName = `${item.name} (${sizeLabel})`;
+                executeAddToCart(event, btn, fullName, price, item.img);
+            }
+            closeSizeModal();
+        }
+
+        function executeAddToCart(e, btn, name, price, img) {
             cart.push({name, price, img});
-            const notice = btn.previousElementSibling;
-            notice.classList.add('show');
-            setTimeout(() => notice.classList.remove('show'), 2000);
+            
+            if(btn) {
+                const notice = btn.previousElementSibling;
+                if(notice && notice.classList.contains('added-notice')) {
+                    notice.classList.add('show');
+                    setTimeout(() => notice.classList.remove('show'), 2000);
+                }
+            }
 
             const fly = document.createElement('div');
             fly.className = 'fly-item';
@@ -415,15 +605,17 @@
         }
 
         window.addEventListener('popstate', function (event) {
-            const modal = document.getElementById('cartModal');
-            if (modal.style.display === 'flex') { modal.style.display = 'none'; }
+            const cartModal = document.getElementById('cartModal');
+            const sizeModal = document.getElementById('sizeModal');
+            if (cartModal.style.display === 'flex') { cartModal.style.display = 'none'; }
+            if (sizeModal.style.display === 'flex') { sizeModal.style.display = 'none'; }
         });
 
         function sendToWA() {
             const n = document.getElementById('uName').value, p = document.getElementById('uPhone').value, a = document.getElementById('uAddr').value;
             if(!n || !p || !a || cart.length === 0) return alert("يرجى إكمال البيانات واختيار الأصناف");
             
-            let msg = `طلب جديد - مطعم أبو خضر\n\n👤 الاسم: ${n}\n📱 الموبايل: ${p}\n📍 العنوان: ${a}\n\nالطلبات:\n` 
+            let msg = `طلب جديد - مطعم أبو خضر 🍔\n\n👤 الاسم: ${n}\n📱 الموبايل: ${p}\n📍 العنوان: ${a}\n\nالطلبات:\n` 
                       + cart.map(i => `- ${i.name} (${i.price} ج.م)`).join('\n')
                       + `\n\n💰 الإجمالي: ${currentTotal} ج.م`;
                       
