@@ -117,7 +117,7 @@
         .addr-tag { color: var(--address-tag); font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; gap: 4px; }
         .brand-addr { font-size: 0.8rem; color: var(--main-text); font-weight: 600; }
 
-        /* --- زر تثبيت التطبيق الشيك (PWA Install Banner) --- */
+        /* --- زر تثبيت التطبيق (PWA Install Banner) --- */
         .install-banner {
             max-width: 600px; margin: 15px auto 0 auto; padding: 0 15px;
             display: none; animation: fadeInDown 0.5s ease;
@@ -160,14 +160,26 @@
         .item-img-box img { width: 100%; height: 100%; object-fit: cover; }
         .food-info { flex: 1; position: relative; }
         .food-name { font-weight: 700; font-size: 1rem; color: var(--main-text); }
-        .food-desc { font-size: 0.8rem; color: var(--desc-text); line-height: 1.3; margin: 4px 0; }
-        .price-row { display: flex; justify-content: space-between; align-items: center; }
+        .food-desc { font-size: 0.8rem; color: var(--desc-text); line-height: 1.3; margin: 3px 0; }
+        
+        .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
         .food-price { font-weight: 800; color: var(--accent); font-size: 0.95rem; }
         
+        /* تنسيق كريتيف لعرض الأسعار المزدوجة (Single / Double) */
+        .dual-prices-container {
+            display: flex; gap: 6px; margin-top: 4px;
+        }
+        .mini-price-tag {
+            background: rgba(211, 84, 0, 0.1); padding: 3px 8px; border-radius: 8px;
+            font-size: 0.75rem; font-weight: 700; color: var(--accent);
+            display: flex; align-items: center; gap: 4px;
+        }
+        .mini-price-tag span { color: var(--main-text); font-weight: 600; }
+
         .add-btn { 
             background: var(--accent); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; 
             font-size: 1.4rem; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold;
-            box-shadow: 0 4px 10px rgba(211, 84, 0, 0.3);
+            box-shadow: 0 4px 10px rgba(211, 84, 0, 0.3); flex-shrink: 0;
         }
         
         .added-notice {
@@ -355,19 +367,17 @@
             }
         }
 
-        // إلغاء أي إعادة تحميل تلقائية مزعجة من الـ Service Worker لضمان الدخول الفوري
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').catch(() => {});
             });
         }
 
-        // بدء شاشة الترحيب والتحميل المتزامن
         function initApp() {
             let percent = 0;
             const span = document.getElementById('loadingSpan');
             const percentText = document.getElementById('loadingPercent');
-            const duration = 1800; // 1.8 ثانية سريعة وناعمة
+            const duration = 1800;
             const intervalTime = 20;
             const step = 100 / (duration / intervalTime);
 
@@ -446,7 +456,16 @@
             if(el) { document.querySelectorAll('.cat-item').forEach(b => b.classList.remove('active')); el.classList.add('active'); }
             
             document.getElementById('menuList').innerHTML = menuData.filter(i => i.category === cat).map((item) => {
-                let priceDisplay = item.price ? `${item.price} ج.م` : "";
+                
+                let priceSectionHTML = "";
+                if (item.single || item.double) {
+                    let tags = [];
+                    if (item.single) tags.push(`<div class="mini-price-tag">Single: <span>${item.single} ج</span></div>`);
+                    if (item.double) tags.push(`<div class="mini-price-tag">Double: <span>${item.double} ج</span></div>`);
+                    priceSectionHTML = `<div class="dual-prices-container">${tags.join('')}</div>`;
+                } else if (item.price && item.price !== "") {
+                    priceSectionHTML = `<div class="food-price">${item.price} ج.م</div>`;
+                }
 
                 return `
                 <div class="food-card">
@@ -454,8 +473,9 @@
                     <div class="food-info">
                         <span class="food-name">${item.name}</span>
                         <p class="food-desc">${item.desc}</p>
+                        ${priceSectionHTML}
                         <div class="price-row">
-                            <span class="food-price">${priceDisplay}</span>
+                            <span></span>
                             <span class="added-notice">تم الطلب ✅</span>
                             <button class="add-btn" onclick="handleAddClick(event, this, '${item.name}')">+</button>
                         </div>
@@ -605,7 +625,6 @@
             window.open(`https://wa.me/201290013255?text=${encodeURIComponent(msg)}`);
         }
 
-        // تشغيل التطبيق فريش ومن أول مرة بدون أي تكرار
         window.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
